@@ -1,6 +1,6 @@
 const modules=[
 {id:'draw',name:'TechDrawings',icon:'✎',type:'create',status:'ready',desc:'Editor i generador d’esquemes tecnològics vectorials: forces, esforços, estructures, màquines, energia i circuits.',tags:['SVG','PNG','Esquemes','Forces'],url:'https://aagust11.github.io/techdrawings/'},
-{id:'mechanisms',name:'MechanismLab',icon:'⚙',type:'simulate',status:'ready',desc:'Laboratori de mecanismes basat en GearLab: engranatges i transmissions amb simulació interactiva.',tags:['Engranatges','RPM','Transmissió'],url:'https://aagust11.github.io/dev_gearlab/'},
+{id:'mechanisms',name:'MechanismLab',icon:'⚙',type:'simulate',status:'ready',desc:'Laboratori de mecanismes basat en GearLab: engranatges i transmissions amb simulació interactiva.',tags:['Engranatges','RPM','Transmissió'],url:'./modules/mechanisms/'},
 {id:'problems',name:'TechProblems',icon:'∑',type:'practice',status:'next',desc:'Generador paramètric de problemes amb variants, dades coherents, procediment i solucionari.',tags:['Problemes','Variants','Solucions']},
 {id:'lab',name:'TechLab',icon:'⌁',type:'simulate',status:'planned',desc:'Laboratoris guiats on l’alumnat prediu, modifica variables, experimenta i interpreta resultats.',tags:['DUA','Experimentació','Laboratori']},
 {id:'worksheet',name:'TechWorksheet',icon:'▤',type:'create',status:'planned',desc:'Constructor de fitxes que combina problemes, dibuixos, activitats i laboratoris de la suite.',tags:['Fitxes','PDF','Activitats']},
