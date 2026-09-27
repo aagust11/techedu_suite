@@ -1,0 +1,15 @@
+const modules=[
+{id:'draw',name:'TechDrawings',icon:'✎',type:'create',status:'ready',desc:'Editor i generador d’esquemes tecnològics vectorials: forces, esforços, estructures, màquines, energia i circuits.',tags:['SVG','PNG','Esquemes','Forces'],url:'https://aagust11.github.io/techdrawings/'},
+{id:'mechanisms',name:'MechanismLab',icon:'⚙',type:'simulate',status:'ready',desc:'Laboratori de mecanismes basat en GearLab: engranatges i transmissions amb simulació interactiva.',tags:['Engranatges','RPM','Transmissió'],url:'https://aagust11.github.io/dev_gearlab/'},
+{id:'problems',name:'TechProblems',icon:'∑',type:'practice',status:'next',desc:'Generador paramètric de problemes amb variants, dades coherents, procediment i solucionari.',tags:['Problemes','Variants','Solucions']},
+{id:'lab',name:'TechLab',icon:'⌁',type:'simulate',status:'planned',desc:'Laboratoris guiats on l’alumnat prediu, modifica variables, experimenta i interpreta resultats.',tags:['DUA','Experimentació','Laboratori']},
+{id:'worksheet',name:'TechWorksheet',icon:'▤',type:'create',status:'planned',desc:'Constructor de fitxes que combina problemes, dibuixos, activitats i laboratoris de la suite.',tags:['Fitxes','PDF','Activitats']},
+{id:'logic',name:'LogicLab',icon:'⊕',type:'practice',status:'planned',desc:'Boole, taules de veritat, Karnaugh i portes lògiques en un flux visual i interactiu.',tags:['Boole','Karnaugh','Portes']},
+{id:'circuits',name:'CircuitLab',icon:'ϟ',type:'simulate',status:'planned',desc:'Circuits educatius simplificats amb mesures, sèrie/paral·lel i activitats guiades.',tags:['Electricitat','Ohm','Circuits']},
+{id:'structures',name:'StructureLab',icon:'△',type:'simulate',status:'planned',desc:'Construcció de marcs i encavallades per explorar càrregues, tracció, compressió i deformació.',tags:['Estructures','Esforços','Ponts']},
+{id:'materials',name:'MaterialsLab',icon:'◇',type:'practice',status:'planned',desc:'Comparador de propietats i reptes de selecció de materials segons necessitats tècniques.',tags:['Materials','Propietats','Selecció']}
+];
+const labels={ready:'OPERATIU',next:'SEGÜENT',planned:'PLANIFICAT'};let filter='all';
+const root=document.querySelector('#modules'),search=document.querySelector('#search');
+function render(){const q=search.value.toLocaleLowerCase('ca');const list=modules.filter(m=>(filter==='all'||m.type===filter)&&[m.name,m.desc,...m.tags].join(' ').toLocaleLowerCase('ca').includes(q));root.innerHTML=list.map(m=>`<article class="card"><div class="head"><span class="icon">${m.icon}</span><span class="status ${m.status}">${labels[m.status]}</span></div><h3>${m.name}</h3><p>${m.desc}</p><div class="tags">${m.tags.map(t=>`<span>${t}</span>`).join('')}</div>${m.url?`<a class="open" href="${m.url}" target="_blank" rel="noopener">Obre el mòdul →</a>`:''}</article>`).join('')||'<p>No hi ha cap mòdul que coincideixi amb la cerca.</p>'}
+document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render()});search.oninput=render;render();
