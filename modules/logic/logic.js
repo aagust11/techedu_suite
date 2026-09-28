@@ -1,7 +1,7 @@
 const $ = s => document.querySelector(s);
 const {parse, evaluate, variables, assignment, gray, simplify} = LogicCore;
 const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const format = s => esc(s).replaceAll('!','¬').replaceAll('&',' · ').replaceAll('|',' + ');
+const format = s => esc(s.replaceAll('!','¬').replaceAll('&',' · ').replaceAll('|',' + '));
 const bits = (v,n) => v.toString(2).padStart(n,'0');
 function mapHTML(rows, names, key, title, minterms, hidden) {
   const n=names.length, rn=n===4?2:1, cn=n-rn, rv=names.slice(0,rn),cv=names.slice(rn),rg=gray(rn),cg=gray(cn);
@@ -23,7 +23,7 @@ function mapHTML(rows, names, key, title, minterms, hidden) {
   html+='</tbody></table>';
   if(hidden) return html+'<p class="map-note">Resultats i agrupacions ocults. Desactiva el mode docent per comprovar-los.</p></article>';
   html+='<div class="map-explanation"><strong>Expressió mínima: '+format(result.expression)+'</strong>';
-  if(result.groups.length) html+='<ol>'+result.groups.map((g,j)=>'<li><button type="button" class="group-step" data-cells="'+g.cells.join(',')+'"><span class="group-number">'+(j+1)+'</span> m'+g.cells.join(', m')+' → <b>'+format(g.term)+'</b> <small>('+g.cells.length+' cel·la'+(g.cells.length===1?'':'s')+')</small></button></li>').join('')+'</ol>';
+  if(result.groups.length) html+='<ol>'+result.groups.map((g,j)=>'<li><button type="button" class="group-step" data-cells="'+g.cells.join(',')+'"><span class="group-number">'+(j+1)+'</span> m'+g.cells.join(', m')+' → <b>'+format(g.term)+'</b> <small>('+g.cells.length+' cel·l'+(g.cells.length===1?'a':'es')+')</small></button></li>').join('')+'</ol>';
   html+='<p>Els grups poden unir vores oposades del mapa. Les variables que canvien dins d’un grup desapareixen; es conserva cada variable constant.</p></div></article>';
   return html;
 }
