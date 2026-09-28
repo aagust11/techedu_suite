@@ -34,4 +34,40 @@ const TechEduBank={
   {tier:3,skill:'comparació justa',text:'Dues bigues de materials diferents tenen gruixos diferents. Per comparar deformació cal considerar…',options:['Només el material','Material, geometria i càrrega','Només el pes'],correct:1}
  ]}
 };
+const TechEduAlternates={
+ logic:[
+ [1,'operadors','Amb A=0, quant val !A?',['0','1','No es pot saber'],1],
+ [1,'taules de veritat','Quina entrada fa que A | B sigui 0?',['0,0','0,1','1,1'],0],
+ [2,'operadors','Amb A=1 i B=0, quant val A & !B?',['0','1','2'],1],
+ [2,'prioritat i parèntesis','Amb A=0 i B=0, quant val !(A | B)?',['0','1','Depèn de C'],1],
+ [3,'equivalència','Quina expressió equival a !(A & B)?',['!A & !B','!A | !B','A | B'],1],
+ [3,'simplificació','Quina expressió equival a (A | B) & (A | !B)?',['A','B','!A'],0]],
+ mechanisms:[
+ [1,'elements','Quin element uneix dues politges per transmetre el moviment?',['Corretja','Biga','Fulcre'],0],
+ [1,'sentit de gir','Tres engranatges exteriors consecutius: el primer i el tercer giren…',['Igual','En sentit contrari','No giren'],0],
+ [2,'relació de transmissió','Una roda de 40 dents mou una de 20. La conduïda gira…',['El doble','La meitat','Igual'],0],
+ [2,'eixos','Una roda gira a 90 rpm. Una altra fixada al seu mateix eix gira a…',['45 rpm','90 rpm','180 rpm'],1],
+ [3,'càlcul','Una motriu de 30 dents gira a 200 rpm. Quantes dents necessita la conduïda per girar a 100 rpm?',['15','30','60'],2],
+ [3,'tren compost','Dos parells successius redueixen cadascun la velocitat a la meitat. Amb 400 rpm d’entrada, la sortida té…',['100 rpm','200 rpm','400 rpm'],0]],
+ electricity:[
+ [1,'magnituds','En quina unitat mesurem la intensitat del corrent?',['Volt','Ampere','Ohm'],1],
+ [1,'circuit tancat','Una bombeta ideal s’encén quan el circuit amb la pila està…',['Obert','Tancat','Sense connexió a la pila'],1],
+ [2,'llei d’Ohm','Una resistència de 6 Ω està connectada a 12 V. Intensitat?',['0,5 A','2 A','72 A'],1],
+ [2,'energia útil','Una màquina rep 250 J i en dissipa 50 J. Energia útil?',['200 J','300 J','50 J'],0],
+ [3,'variació de variables','Amb R constant, reduïm V a la meitat. Què passa amb I?',['Es duplica','Es manté','Es redueix a la meitat'],2],
+ [3,'rendiment','Cal obtenir 180 J útils amb un rendiment del 60%. Quina energia d’entrada cal?',['108 J','240 J','300 J'],2]],
+ materials:[
+ [1,'propietats','Quina propietat mesura la resistència a ser ratllat?',['Duresa','Densitat','Transparència'],0],
+ [1,'conductivitat','Per recobrir un cable elèctric, quin material triaries?',['Coure','Plàstic aïllant','Alumini'],1],
+ [2,'comparació','Dues peces tenen el mateix volum. A té densitat 2700 i B 7800 kg/m³. Quina té menys massa?',['A','B','Igual'],0],
+ [2,'requisits','Per a un mànec que toca una olla calenta, quin criteri prioritzes?',['Alta conductivitat tèrmica','Baixa conductivitat tèrmica','Transparència'],1],
+ [3,'compromisos','Una peça lleugera es deforma massa. Quina modificació cal estudiar mantenint el límit de massa?',['Canviar secció i comparar rigidesa i massa','Triar sempre el material més dens','Canviar només el color'],0],
+ [3,'comparació justa','Vols comparar materials amb una prova de flexió. Què mantens igual?',['Només el color','Geometria, suports i càrrega','Només la massa'],1]]
+};
+for(const [domain,bank] of Object.entries(TechEduBank)){
+ bank.questions.forEach((q,i)=>q.id=domain+'-a-'+i);
+ bank.alternates=TechEduAlternates[domain].map(([tier,skill,text,options,correct],i)=>({id:domain+'-b-'+i,tier,skill,text,options,correct}));
+ bank.version=2;
+ bank.resolve=ids=>ids?ids.map(id=>[...bank.questions,...bank.alternates].find(q=>q.id===id)).filter(Boolean):bank.questions;
+}
 if(typeof module==='object'&&module.exports)module.exports=TechEduBank;

@@ -38,3 +38,12 @@ Variables `A`–`E`, constants `0` i `1`, negació `!`, conjunció `&`, disjunci
 - GearLab: https://github.com/aagust11/dev_gearlab
 
 Creat per Àngel AC.
+
+
+### Treball local per perfil
+
+LogicLab, TechProblems, MaterialsLab i MechanismLab conserven l’esborrany del perfil actiu: respostes, retorn, prediccions, conclusions i configuració/escena. Sense perfil no hi ha desament persistent. «Desa com a evidència» conserva una instantània recuperable (12 darreres per mòdul); generar nous problemes arxiva el treball anterior. Els intents de comprovació i canvis de suport tenen un registre limitat a 200 esdeveniments per mòdul. El quadern i les proves en curs viatgen amb l’exportació JSON dels perfils. La importació substitueix les dades locals amb confirmació.
+
+Els errors de quota i els conflictes detectats amb altres pestanyes es mostren sense indicar un desament reeixit. Els perfils anteriors són compatibles. No hi ha sincronització remota ni diagnòstic psicomètric: les dues versions de cada prova inicial orienten el docent, que decideix si aplica la proposta. Els suports es poden combinar amb els reptes d’ampliació.
+
+Validació: `node --test tests/*.test.js`. La regressió de navegador és a `tests/browser-progress.cjs`; necessita Playwright disponible (o `PLAYWRIGHT_MODULE` amb el camí del mòdul) i un servidor local, per defecte a `http://localhost:8765` (`BASE_URL` configurable).
