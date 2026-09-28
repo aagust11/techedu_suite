@@ -4,7 +4,7 @@ Suite modular d'eines educatives per a Tecnologia i Digitalització (ESO i Batxi
 
 ## Mòduls
 
-- **TechDrawings** — editor vectorial d'esquemes tecnològics. Operatiu i en evolució.
+- **TechDrawings** — còpia integrada de l'editor vectorial d'esquemes tecnològics. La palanca es pot editar per gènere i braços físics en metres, o manualment per les posicions de fulcre, P i R. TechProblems hi obre directament la palanca generada.
 - **MechanismLab / GearLab** — simulador de mecanismes i transmissions. Motor existent reutilitzat.
 - **TechProblems** — problemes paramètrics amb raonament guiat. Les palanques tenen esquema coherent amb el gènere, els braços i l'equilibri de moments.
 - **TechLab** — laboratoris guiats i simulacions.

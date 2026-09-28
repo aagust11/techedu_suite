@@ -1,5 +1,5 @@
 const modules=[
-{id:'draw',name:'TechDrawings',icon:'✎',type:'create',status:'ready',desc:'Editor i generador d’esquemes tecnològics vectorials: forces, esforços, estructures, màquines, energia i circuits.',tags:['SVG','PNG','Esquemes','Forces'],url:'https://aagust11.github.io/techdrawings/'},
+{id:'draw',name:'TechDrawings',icon:'✎',type:'create',status:'ready',desc:'Editor i generador d’esquemes tecnològics vectorials: forces, esforços, estructures, màquines, energia i circuits.',tags:['SVG','PNG','Esquemes','Forces'],url:'./modules/drawings/'},
 {id:'mechanisms',name:'MechanismLab',icon:'⚙',type:'simulate',status:'ready',desc:'Laboratori de mecanismes basat en GearLab: engranatges i transmissions amb simulació interactiva.',tags:['Engranatges','RPM','Transmissió'],url:'./modules/mechanisms/'},
 {id:'problems',name:'TechProblems',icon:'∑',type:'practice',status:'ready',desc:'Generador paramètric de problemes amb variants, dades coherents, procediment i solucionari.',tags:['Problemes','Variants','Solucions'],url:'./modules/problems/'},
 {id:'lab',name:'TechLab',icon:'⌁',type:'simulate',status:'planned',desc:'Laboratoris guiats on l’alumnat prediu, modifica variables, experimenta i interpreta resultats.',tags:['DUA','Experimentació','Laboratori']},
