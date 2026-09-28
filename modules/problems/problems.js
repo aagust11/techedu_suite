@@ -55,4 +55,4 @@ $('#topic').onchange=()=>{window.TechEduSetDomain?.(['ohm','energy'].includes($(
 window.addEventListener('techedu-level',adapt);
 adapt();
 
-window.TechEduActivity={capture:()=>({seed,config:generatedConfig}),restore:extra=>{if(extra?.config){for(const id of ['topic','difficulty','count'])$('#'+id).value=extra.config[id];}generate(Number.isInteger(extra?.seed)?extra.seed:undefined)}};
+window.TechEduActivity={capture:()=>({seed,config:generatedConfig}),restore:extra=>{if(extra?.config){for(const id of ['topic','difficulty','count'])$('#'+id).value=extra.config[id];}const config={topic:$('#topic').value,difficulty:$('#difficulty').value,count:$('#count').value};window.TechEduSetDomain?.(['ohm','energy'].includes(config.topic)?'electricity':'mechanisms');for(const id of ['topic','difficulty','count'])$('#'+id).value=config[id];generate(Number.isInteger(extra?.seed)?extra.seed:undefined)}};
