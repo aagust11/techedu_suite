@@ -13,7 +13,7 @@ function mapHTML(rows, names, key, title, minterms, hidden) {
     for(const c of cg) {
       const i=parseInt(bits(r,rn)+bits(c,cn),2), value=rows[i][key];
       const groups=result.groups.map((g,j)=>g.cells.includes(i)?j+1:null).filter(Boolean);
-      html+='<td class="'+(value?'one':'')+'" data-cell="'+i+'" title="m'+i+'">';
+      html+='<td class="'+(!hidden&&value?'one':'')+'" data-cell="'+i+'" title="m'+i+'">';
       html+='<small>m'+i+'</small><b>'+(hidden?'?':value)+'</b>';
       if(!hidden && groups.length) html+='<span class="group-badges">'+groups.map(j=>'<i>'+j+'</i>').join('')+'</span>';
       html+='</td>';
@@ -41,7 +41,7 @@ function analyze() {
       if(tree2 && y1!==y2)diff.push({i,v,y1,y2});
     }
     const equivalent=tree2&&diff.length===0;
-    $('#verdict').className='verdict '+(tree2?(equivalent?'ok':'bad'):'single-result');
+    $('#verdict').className='verdict '+(hidden?'single-result':tree2?(equivalent?'ok':'bad'):'single-result');
     $('#verdict').innerHTML=hidden?'<b>Mode docent actiu</b><span>Fes la predicció i mostra els resultats per comprovar-la.</span>':tree2?(equivalent?'<b>Expressions equivalents</b><span>Coincideixen en totes les combinacions.</span>':'<b>No són equivalents</b><span>'+diff.length+' combinacions donen resultats diferents.</span>'):'<b>Funció analitzada</b><span>Escriu Y₂ per comparar-la.</span>';
     $('#metrics').innerHTML='<article><b>'+names.length+'</b><span>variables</span></article><article><b>'+(2**names.length)+'</b><span>combinacions</span></article><article><b>'+(hidden?'?':m1.length)+'</b><span>uns a Y₁</span></article><article><b>'+(tree2?(hidden?'?':m2.length):'—')+'</b><span>uns a Y₂</span></article><article><b>'+(tree2?(hidden?'?':diff.length):'—')+'</b><span>discrepàncies</span></article>';
     $('#analysis').innerHTML='<b>Y₁ =</b> '+format(e1)+(tree2?' &nbsp; · &nbsp; <b>Y₂ =</b> '+format(e2):'')+'<br><small>Variables detectades: '+names.join(', ')+'.</small>';
@@ -83,6 +83,8 @@ function adaptLogic(){
   }else{
     area.innerHTML='<b>Itinerari autònom · '+esc(profile.name)+'</b><p>Construeix dues expressions. Prediu si són equivalents, busca un contraexemple i comprova la simplificació amb Karnaugh.</p><button id="loadLevel" type="button">Carrega un exemple</button>';
   }
+  if(supports.stepByStep&&level!=='guided')area.insertAdjacentHTML('beforeend','<ol><li>Assigna un valor a cada variable.</li><li>Resol primer els parèntesis, després NOT, AND i OR.</li><li>Escriu la sortida esperada i contrasta-la.</li></ol>');
+  if(supports.shortText)area.querySelector('p').textContent=level==='extension'?'Simplifica Y₁. Escriu Y₂. Justifica els grups.':level==='guided'?'Compara AND amb les entrades 1,0 i 1,1.':'Prediu, compara i justifica dues expressions.';
   $('#loadLevel').onclick=()=>{
     $('#expr1').value=level==='guided'?'A & B':level==='extension'?'(A & B) | (A & !B) | (C & D)':'!(A & B)';
     $('#expr2').value=level==='standard'?'!A | !B':'';
@@ -93,3 +95,5 @@ function adaptLogic(){
 window.addEventListener('techedu-level',adaptLogic);
 adaptLogic();
 analyze();
+
+window.TechEduActivity={restore:()=>analyze()};

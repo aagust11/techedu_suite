@@ -6,7 +6,7 @@ const shortAdvice={bike:'Compara massa i rigidesa d’acer i alumini.',cable:'Co
 function recommend(){const {supports}=window.TechEduCurrent?.()||{supports:{}};$('#recommendation').innerHTML=(supports.shortText?shortAdvice:advice)[$('#use').value]}
 function adapt(){
  const {profile,level,supports}=window.TechEduCurrent?.()||{level:'standard',supports:{}};
- const area=$('#materialActivity'),name=profile?' · '+profile.name:'';
+ const area=$('#materialActivity'),name=profile?' · '+profile.name.replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'):'';
  if(level==='guided'){
   area.innerHTML='<b>Selecció pautada'+name+'</b><p>1. Tria una aplicació. 2. Identifica la propietat imprescindible. 3. Compara només dos materials. 4. Justifica quin triaries.</p><label>Per a un cable, quina propietat necessites primer? <select id="propertyChoice"><option value="">Tria</option><option value="density">Densitat</option><option value="conductivity">Conductivitat</option><option value="transparent">Transparència</option></select></label><button id="checkProperty">Comprova</button><span id="propertyFeedback" role="status"></span>';
   $('#checkProperty').onclick=()=>{$('#propertyFeedback').textContent=$('#propertyChoice').value==='conductivity'?'Correcte. Ara compara coure i alumini a la taula.':'Revisa què ha de circular per un cable.'};
@@ -20,3 +20,5 @@ function adapt(){
 $('#recommend').onclick=recommend;$('#use').onchange=recommend;
 window.addEventListener('techedu-level',adapt);
 draw();adapt();
+
+window.TechEduActivity={restore:()=>recommend()};

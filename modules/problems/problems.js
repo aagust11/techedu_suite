@@ -1,5 +1,7 @@
-const $=s=>document.querySelector(s),rnd=(a,b)=>Math.round((a+Math.random()*(b-a))*10)/10,ri=(a,b)=>Math.floor(a+Math.random()*(b-a+1));
-let generated=[];
+let seed=1,randomState=1;
+function random(){randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;return randomState/4294967296;}
+const $=s=>document.querySelector(s),rnd=(a,b)=>Math.round((a+random()*(b-a))*10)/10,ri=(a,b)=>Math.floor(a+random()*(b-a+1));
+let generated=[],generatedConfig;
 function problem(type,d){
  if(type==='mixed')type=['lever','gears','ohm','energy','multigear'][ri(0,d===1?3:4)];
  if(type==='multigear'){
@@ -25,17 +27,22 @@ function problem(type,d){
  return {title:'Rendiment energètic',q:`Una màquina rep <b>${Ein} J</b> i en transforma <b>${Eout} J</b> en energia útil. Calcula el rendiment en percentatge.`,guide:['Distingeix l’energia d’entrada de l’energia útil.','Divideix Eútil entre Eentrada.','Multiplica per 100 per expressar-ho en percentatge.'],answer:percent,unit:'%',s:`η=${Eout}/${Ein}·100=<b>${percent}%</b>. Dissipa ${Ein-Eout} J.`,extra:'Quina energia útil obtindries amb la mateixa entrada si el rendiment augmentés 5 punts percentuals?',extraSolution:`${Ein}·${(percent+5)/100} = ${Ein*(percent+5)/100} J (si el rendiment no supera el 100%).`};
 }
 function paint(){
+ const previous=window.TechEduCapture?.();
  const show=$('#solutions').checked,guide=$('#guided').checked,level=window.TechEduCurrent?.().level||'standard';
- $('#output').innerHTML=generated.map((p,i)=>`<article><small>VARIANT ${i+1}</small><h2>${p.title}</h2><p>${p.q}</p>${p.diagram||''}${p.editURL?`<p><a href="${p.editURL}" target="_blank" rel="noopener">Edita aquesta palanca a TechDrawings →</a></p>`:''}${guide?`<div class="solution"><b>Passos concrets</b><ol>${p.guide.map(x=>'<li>'+x+'</li>').join('')}</ol></div>`:''}<label>Resposta (${p.unit})<input class="answer" data-index="${i}" inputmode="decimal" placeholder="Escriu un nombre"></label><button class="check-answer" data-index="${i}">Comprova</button><p class="feedback" data-index="${i}" role="status"></p>${level==='extension'?`<div class="extension"><b>Repte de transferència</b><p>${p.extra}</p>${show?'<p>'+p.extraSolution+'</p>':''}</div>`:''}${show?`<div class="solution"><b>Resolució</b><p>${p.s}</p></div>`:''}</article>`).join('');
+ $('#output').innerHTML=generated.map((p,i)=>`<article><small>VARIANT ${i+1}</small><h2>${p.title}</h2><p>${window.TechEduCurrent?.().supports.shortText?p.q.replaceAll('. ','.<br>'):p.q}</p>${p.diagram||''}${p.editURL?`<p><a href="${p.editURL}" target="_blank" rel="noopener">Edita aquesta palanca a TechDrawings →</a></p>`:''}${guide?`<div class="solution"><b>Passos concrets</b><ol>${p.guide.map(x=>'<li>'+x+'</li>').join('')}</ol></div>`:''}<label>Resposta (${p.unit})<input class="answer" data-index="${i}" inputmode="decimal" placeholder="Escriu un nombre"></label><button class="check-answer" data-index="${i}">Comprova</button><p class="feedback" data-index="${i}" role="status"></p>${level==='extension'?`<div class="extension"><b>Repte de transferència</b><p>${p.extra}</p><label>Predicció i justificació<textarea class="reasoning" data-index="${i}"></textarea></label>${show?'<p>'+p.extraSolution+'</p>':''}</div>`:''}${show?`<div class="solution"><b>Resolució</b><p>${p.s}</p></div>`:''}</article>`).join('');
+ if(previous)window.TechEduRestoreFields?.(previous);
+
 }
-function generate(){
- const n=Math.min(30,Math.max(1,+$('#count').value||1));generated=Array.from({length:n},()=>problem($('#topic').value,+$('#difficulty').value));paint();
+function generate(nextSeed){
+ seed=Number.isInteger(nextSeed)?nextSeed:crypto.getRandomValues(new Uint32Array(1))[0];randomState=seed;
+ const n=Math.min(30,Math.max(1,+$('#count').value||1));generatedConfig={topic:$('#topic').value,difficulty:$('#difficulty').value,count:n};generated=Array.from({length:n},()=>problem($('#topic').value,+$('#difficulty').value));paint();
 }
+let adaptedProfile;
 function adapt(){
  const {profile,level,supports}=window.TechEduCurrent?.()||{level:'standard',supports:{}};
  $('#profileHint').textContent=profile?profile.name+' · '+({guided:'Dades senzilles i passos concrets',standard:'Pràctica autònoma',extension:'Càlcul i transferència'}[level]):'Sense perfil: nivell habitual.';
  if(profile){$('#difficulty').value={guided:'1',standard:'2',extension:'3'}[level];$('#guided').checked=level==='guided'||supports.stepByStep;$('#solutions').checked=false;$('#count').value=level==='guided'?2:level==='extension'?3:4;}
- generate();
+ if(adaptedProfile!==profile?.id||!generated.length){adaptedProfile=profile?.id;generate();}else paint();
 }
 $('#output').onclick=e=>{
  const button=e.target.closest('.check-answer');if(!button)return;const i=Number(button.dataset.index),input=$('#output').querySelector('.answer[data-index="'+i+'"]'),feedback=$('#output').querySelector('.feedback[data-index="'+i+'"]');
@@ -43,7 +50,9 @@ $('#output').onclick=e=>{
  const target=generated[i].answer,tolerance=Math.max(.11,Math.abs(target)*.005);
  feedback.textContent=Math.abs(value-target)<=tolerance?'Correcte. Explica també per què el resultat és coherent.':'Encara no. Revisa la fórmula i les unitats; pots mostrar els passos o la resolució.';
 };
-$('#generate').onclick=generate;$('#solutions').onchange=paint;$('#guided').onchange=paint;
+$('#generate').onclick=()=>{if(window.TechEduSession?.archive()===false)return;generate();document.querySelectorAll('#output .answer,#output .reasoning').forEach(x=>x.value='');document.querySelectorAll('#output .feedback').forEach(x=>x.textContent='')};$('#solutions').onchange=paint;$('#guided').onchange=paint;
 $('#topic').onchange=()=>{window.TechEduSetDomain?.(['ohm','energy'].includes($('#topic').value)?'electricity':'mechanisms')};
 window.addEventListener('techedu-level',adapt);
 adapt();
+
+window.TechEduActivity={capture:()=>({seed,config:generatedConfig}),restore:extra=>{if(extra?.config){for(const id of ['topic','difficulty','count'])$('#'+id).value=extra.config[id];}const config={topic:$('#topic').value,difficulty:$('#difficulty').value,count:$('#count').value};window.TechEduSetDomain?.(['ohm','energy'].includes(config.topic)?'electricity':'mechanisms');for(const id of ['topic','difficulty','count'])$('#'+id).value=config[id];generate(Number.isInteger(extra?.seed)?extra.seed:undefined)}};

@@ -19,7 +19,7 @@
   label.append(select);const info=document.createElement('span');info.textContent='Activitat: '+TechEduProfiles.labels[TechEduProfiles.effective(active,domain)];
   const link=document.createElement('a');link.href='../../profiles/';link.textContent='Configura perfils i proves →';
   panel.append(label,info,link);
-  select.onchange=()=>{data.activeId=select.value||null;TechEduProfiles.save(data)};
+  select.onchange=()=>{data.activeId=select.value||null;try{TechEduProfiles.save(data)}catch(e){alert('No s’ha pogut canviar el perfil: '+e.message);render()}};
   window.dispatchEvent(new CustomEvent('techedu-level',{detail:window.TechEduCurrent()}));
  }
  window.addEventListener('techedu-profile-change',render);
