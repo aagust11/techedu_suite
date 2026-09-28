@@ -71,4 +71,25 @@ $('#kmaps').addEventListener('focusout',e=>{const button=e.target.closest('.grou
 $('#calc').onclick=analyze;$('#hideOutputs').onchange=analyze;
 $('#swap').onclick=()=>{const old=$('#expr1').value;$('#expr1').value=$('#expr2').value;$('#expr2').value=old;analyze();};
 $('#example').onclick=()=>{$('#expr1').value='!(A & B)';$('#expr2').value='!A | !B';analyze();};
+function adaptLogic(){
+  const {profile,level,supports}=window.TechEduCurrent?.()||{level:'standard',supports:{}};
+  const area=$('#levelActivity');
+  if(!profile){area.innerHTML='<b>Explora lliurement</b><p>Selecciona un perfil per rebre una proposta de treball ajustada a aquest àmbit.</p>';return;}
+  if(level==='guided'){
+    area.innerHTML='<b>Itinerari pautat · '+esc(profile.name)+'</b><p>1. Carrega A & B. 2. Abans de mostrar la taula, prediu què passarà amb A=1 i B=0. 3. Compara amb A=1 i B=1. 4. Comprova i explica quina condició necessita AND.</p><button id="loadLevel" type="button">Carrega l’activitat</button><label>A=1, B=0 → Y=? <select id="predict"><option value="">Tria</option><option value="0">0</option><option value="1">1</option></select></label><button id="checkPredict" type="button">Comprova la predicció</button><span id="predictResult" role="status"></span>';
+    $('#checkPredict').onclick=()=>{$('#predictResult').textContent=$('#predict').value===''?'Tria un valor primer.':$('#predict').value==='0'?'Correcte. Amb AND cal que totes dues entrades siguin 1.':'Revisa B: val 0. AND només val 1 si A i B valen 1.'};
+  }else if(level==='extension'){
+    area.innerHTML='<b>Repte d’ampliació · '+esc(profile.name)+'</b><p>Sense consultar la taula, simplifica (A & B) | (A & !B) | (C & D). Escriu la proposta a Y₂, compara-la amb Y₁ i justifica cada grup del Karnaugh de 4 variables.</p><button id="loadLevel" type="button">Carrega el repte</button>';
+  }else{
+    area.innerHTML='<b>Itinerari autònom · '+esc(profile.name)+'</b><p>Construeix dues expressions. Prediu si són equivalents, busca un contraexemple i comprova la simplificació amb Karnaugh.</p><button id="loadLevel" type="button">Carrega un exemple</button>';
+  }
+  $('#loadLevel').onclick=()=>{
+    $('#expr1').value=level==='guided'?'A & B':level==='extension'?'(A & B) | (A & !B) | (C & D)':'!(A & B)';
+    $('#expr2').value=level==='standard'?'!A | !B':'';
+    $('#hideOutputs').checked=level==='guided'||!!supports.hideSolution;
+    analyze();
+  };
+}
+window.addEventListener('techedu-level',adaptLogic);
+adaptLogic();
 analyze();
