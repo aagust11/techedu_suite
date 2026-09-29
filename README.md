@@ -105,3 +105,6 @@ Verificació específica: `tests/rigging.test.js` cobreix geometria, dependènci
 Cada mòdul conserva un esborrany per compte (i un de Visitant separat), inclòs en la còpia del compte. Per conservar diverses fitxes, exporta-les com a JSON. Hi ha control de mida, errors de quota i detecció de versions modificades en altres pestanyes. Les imatges s’incrusten i la fitxa completa es limita a uns 390 kB per garantir-ne el desament local.
 
 Proves: `tests/builders.test.js` comprova càlculs, conservació de potència, plantilles i còpia de compte; `tests/browser-builders.cjs` verifica controls, transferències, edició, impressió sense solucions, JSON, comptes, conflictes i vista mòbil.
+
+### Esforços: abans i després
+A Tecnofigures → Esforços hi ha cinc peces comparatives de tracció, compressió, flexió, tall/cisallament i torsió. Cada peça permet mostrar abans, després o tots dos; ajustar longitud, gruix i deformació visual (0–100); ocultar forces/moments i superposar el contorn inicial. Les etiquetes es mouen independentment. Són deformacions esquemàtiques, no un model quantitatiu del material: el cisallament representa distorsió sense ruptura i la torsió el gir relatiu entre seccions. Les peces utilitzen el mateix desament, desfer/refer i exportació de l’editor. `tests/browser-efforts.cjs` verifica els cinc esforços, controls, persistència, SVG i amplada mòbil.
