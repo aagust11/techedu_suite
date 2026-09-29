@@ -4,9 +4,9 @@ Suite modular d'eines educatives per a Tecnologia i Digitalització (ESO i Batxi
 
 ## Mòduls
 
-- **Perfils i proves de nivell** — àlies locals, grau de pauta general i per àmbit, preferències de presentació, quatre proves inicials breus i historial revisable. Les recomanacions no canvien el perfil fins que el docent les aplica.
+- **El meu compte (espai transversal)** — àlies locals, grau de pauta general i per àmbit, preferències de presentació, cinc proves inicials breus i historial revisable. Les recomanacions no canvien el perfil fins que el docent les aplica.
 
-- **TechDrawings** — còpia integrada de l'editor vectorial d'esquemes tecnològics. La palanca es pot editar per gènere i braços físics en metres, o manualment per les posicions de fulcre, P i R. TechProblems hi obre directament la palanca generada.
+- **Tecnofigures** — còpia integrada de l'editor vectorial d'esquemes tecnològics. La palanca es pot editar per gènere i braços físics en metres, o manualment per les posicions de fulcre, P i R. TechProblems hi obre directament la palanca generada.
 - **MechanismLab / GearLab** — simulador de mecanismes i transmissions. Motor existent reutilitzat.
 - **TechProblems** — problemes paramètrics amb raonament guiat. Les palanques tenen esquema coherent amb el gènere, els braços i l'equilibri de moments.
 - **TechLab** — laboratoris guiats i simulacions.
@@ -18,15 +18,15 @@ Suite modular d'eines educatives per a Tecnologia i Digitalització (ESO i Batxi
 
 ## Principis d'arquitectura
 
-No duplicar motors que ja existeixen. TechDrawings serà el motor gràfic reutilitzable i GearLab el punt de partida del mòdul de mecanismes. Els mòduls nous compartiran models de dades, components visuals i formats d'exportació.
+No duplicar motors que ja existeixen. Tecnofigures serà el motor gràfic reutilitzable i GearLab el punt de partida del mòdul de mecanismes. Els mòduls nous compartiran models de dades, components visuals i formats d'exportació.
 
 La portada és una aplicació estàtica compatible amb GitHub Pages. LogicLab i TechProblems no necessiten serveis externs.
 
 ## Perfils i privacitat
 
-Els perfils es desen amb `localStorage` al mateix navegador i origen de GitHub Pages. No hi ha comptes, servidor de dades ni sincronització automàtica. Es poden exportar i importar com a JSON i eliminar des de l'editor. En ordinadors compartits, utilitza àlies o codis: altres persones que facin servir el mateix navegador podrien veure les dades locals. La neteja de dades del navegador les pot esborrar; exporta una còpia si cal conservar-les.
+Els perfils es desen amb `localStorage` al mateix navegador i origen de GitHub Pages. Els comptes són locals; no hi ha autenticació remota, servidor de dades ni sincronització automàtica. Es poden exportar i importar com a JSON i eliminar des de l'editor. En ordinadors compartits, utilitza àlies o codis: altres persones que facin servir el mateix navegador podrien veure les dades locals. La neteja de dades del navegador les pot esborrar; exporta una còpia si cal conservar-les.
 
-Els quatre àmbits de la prova són lògica, mecanismes, electricitat i materials. Cadascun té sis preguntes (dues de reconeixement, dues d'aplicació i dues de transferència). La proposta de nivell és una orientació de treball, no una mesura validada de capacitat ni un diagnòstic. El docent pot establir un nivell general i ajustar cada àmbit de forma independent: més pautes, autonomia habitual o ampliació. LogicLab, TechProblems, MaterialsLab i MechanismLab llegeixen el perfil actiu i presenten itineraris diferents.
+Els cinc àmbits de la prova són lògica, mecanismes, electricitat, materials i comunicacions. Cadascun té sis preguntes (dues de reconeixement, dues d'aplicació i dues de transferència). La proposta de nivell és una orientació de treball, no una mesura validada de capacitat ni un diagnòstic. El docent pot establir un nivell general i ajustar cada àmbit de forma independent: més pautes, autonomia habitual o ampliació. LogicLab, TechProblems, MaterialsLab i MechanismLab llegeixen el perfil actiu i presenten itineraris diferents.
 
 ## Sintaxi de LogicLab
 
@@ -34,7 +34,7 @@ Variables `A`–`E`, constants `0` i `1`, negació `!`, conjunció `&`, disjunci
 
 ## Projectes relacionats
 
-- TechDrawings: https://github.com/aagust11/techdrawings
+- Tecnofigures: https://github.com/aagust11/techdrawings
 - GearLab: https://github.com/aagust11/dev_gearlab
 
 Creat per Àngel AC.
@@ -57,7 +57,7 @@ Validació: `node --test tests/*.test.js`. La regressió de navegador és a `tes
 
 Els tres laboratoris comparteixen el perfil d’àmbit «TIC i comunicacions», però tenen esborranys i evidències independents. Les proves inicials d’aquest àmbit comproven els fonaments del senyal i el canal. Els models expliciten les simplificacions: canal ideal en banda base, lectura sincronitzada, soroll sintètic, absència de filtres antialiasing, i sortida mantinguda que no s’ha de confondre amb una reconstrucció ideal. La codificació no és compressió ni xifrat.
 
-Verificació: `node --test tests/*.test.js` (16 proves). Amb Playwright instal·lat i servidor local: `node tests/browser-signals.cjs` i `node tests/browser-digital.cjs`; `BASE_URL` per defecte `http://localhost:8766`. Comproven canvis de perfil, desament, mostreig, UTF-8, transferència del byte, píxels, resultats ocults i amplada mòbil. `tests/browser-progress.cjs` verifica els mòduls previs.
+Verificació: `node --test tests/*.test.js`. Amb Playwright instal·lat i servidor local: `node tests/browser-signals.cjs` i `node tests/browser-digital.cjs`; `BASE_URL` per defecte `http://localhost:8766`. Comproven canvis de perfil, desament, mostreig, UTF-8, transferència del byte, píxels, resultats ocults i amplada mòbil. `tests/browser-progress.cjs` verifica els mòduls previs.
 
 
 ### Fiabilitat i repte final
@@ -68,4 +68,16 @@ Verificació: `node --test tests/*.test.js` (16 proves). Amb Playwright instal·
 
 Revisió funcional: les proves inicials es desen atòmicament amb el tancament de l’esborrany; un conflicte o una quota exhaurida no esborren les respostes. Els canvis de treball en una altra pestanya ja no reconstrueixen innecessàriament les activitats i no fan desaparèixer retorns. La importació rebutja perfils invàlids o duplicats abans de substituir dades. La taula de materials expressa el comportament elèctric qualitativament i elimina puntuacions sense escala; distingeix mòdul de Young i rigidesa d’una peça. Les palanques transferides obren l’inspector directament.
 
-Validació ampliada: 22 proves Node i `tests/browser-reliability.cjs`, `tests/browser-suite-review.cjs` (BASE_URL per defecte localhost:8767), més les regressions dels laboratoris anteriors. La revisió cobreix entrades operatives, dibuixos i exportació JSON, transferència de palanques, perfils, materials, exportació/importació, conflictes de pestanyes, fallada de quota i recuperació de proves. La inspecció visual cobreix els nous laboratoris en escriptori i mòbil.
+Validació ampliada: 23 proves Node i `tests/browser-reliability.cjs`, `tests/browser-suite-review.cjs` (BASE_URL per defecte localhost:8767), més les regressions dels laboratoris anteriors. La revisió cobreix entrades operatives, dibuixos i exportació JSON, transferència de palanques, perfils, materials, exportació/importació, conflictes de pestanyes, fallada de quota i recuperació de proves. La inspecció visual cobreix els nous laboratoris en escriptori i mòbil.
+
+## Compte de suite i itineraris educatius
+
+El perfil s’obre des d’**El meu compte**, a la capçalera comuna, i ja no és una eina del catàleg. `/account/` concentra la configuració, les proves de fonaments, el treball i les còpies JSON. `/profiles/` redirigeix al compte. És un compte local sense contrasenya, servidor ni sincronització.
+
+El curs (`eso` o `batx`) és independent del grau de pauta (`guided`, `standard`, `extension`) i dels suports. Els perfils anteriors passen a ESO conservant treball i proves. Materials, problemes, mecanismes i Tecnofigures parteixen de 3r d’ESO. Lògica i els cinc laboratoris de comunicacions tenen recorreguts ESO i Batxillerat. L’ampliació ESO proposa transferència i comparació dins del mateix nivell; no assigna automàticament contingut de Batxillerat. Les proves inicials són de fonaments ESO, no acrediten un nivell de Batxillerat.
+
+**Tecnofigures** és el nom del mòdul abans anomenat TechDrawings. Es conserva `/modules/drawings/` per no trencar enllaços. Cada compte guarda el seu dibuix, inclòs en la còpia JSON. El dibuix global anterior continua disponible com a Visitant amb la clau històrica `techdrawings.v1`; es pot exportar i importar al compte desitjat.
+
+Totes les pantalles comparteixen `shared/suite.css`, capçalera, menú de compte, colors, controls de focus i guies del curs. Les eines especialitzades mantenen el seu espai de treball. Els continguts d’aprofundiment (Karnaugh, Young i repte de transmissió) s’identifiquen i es despleguen separadament del recorregut inicial.
+
+Validació del compte i dels itineraris: `tests/browser-account.cjs` comprova migració, independència entre curs i suports, reptes ESO/Batxillerat, separació dels dibuixos entre comptes, exportació i amplada mòbil de totes les pantalles. Sis recorreguts de navegador en total.

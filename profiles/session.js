@@ -19,7 +19,7 @@
  function persist(event){
   if(restoring||!ready||!owner||blocked)return false;
   try{
-   const next={draft:{...capture(),extra:extra()},events:(record?.events||[]),history:record?.history||[]};
+   const next={draft:{...capture(),course:window.TechEduCurrent?.().course||'eso',extra:extra()},events:(record?.events||[]),history:record?.history||[]};
    if(event)next.events=[...next.events,{at:new Date().toISOString(),action:event,...(event==='check-answer'?{responses:next.draft.fields,feedback:next.draft.feedback}:{})}].slice(-200);
    record=P.writeWork(owner,moduleId,next,record?.revision||0);status('Desat en aquest navegador · '+new Date().toLocaleTimeString('ca'));return true;
   }catch(e){blocked=true;status('No s’ha desat: '+e.message+' Copia el text pendent abans de recarregar.');return false;}
@@ -53,7 +53,7 @@
   if(record?.draft)apply(record.draft);
   else if(moduleId==='logic')window.TechEduActivity?.restore?.();
   window.TechEduActivity?.activate?.({restored:!!record?.draft});
-  history();if(!blocked)status(owner?(record?'Treball recuperat.':'Preparat per desar el treball.'): 'Selecciona un perfil per desar i reprendre el treball.');
+  history();if(!blocked)status(owner?(record?'Treball recuperat.':'Preparat per desar el treball.'): 'Obre El meu compte per desar i reprendre el treball.');
  }
  function init(){defaults={...capture(),extra:extra()};activate();}
  window.addEventListener('techedu-level',()=>{if(ready)activate()});

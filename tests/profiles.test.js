@@ -27,3 +27,11 @@ test('imports discard unknown fields, invalid levels and duplicate ids',()=>{
  assert.equal(clean.profiles[0].domains.materials,null);assert.equal(clean.profiles[0].privateNote,undefined);
  assert.deepEqual(Object.keys(clean.profiles[0].supports),['shortText','stepByStep','hideSolution']);
 });
+
+test('course migration preserves support orientation and drawings in account backups',()=>{
+ const old={id:'old',name:'ESO',level:'extension',supports:{stepByStep:true},work:{drawings:{revision:3,draft:{extra:{document:{title:'Pont',objects:[]}}}}}};
+ const data=P.sanitize({activeId:'old',profiles:[old,{id:'new',name:'Batx',course:'batx',level:'guided'}]});
+ assert.equal(data.profiles[0].course,'eso');assert.equal(data.profiles[0].level,'extension');assert.equal(data.profiles[0].supports.stepByStep,true);
+ assert.equal(data.profiles[0].work.drawings.draft.extra.document.title,'Pont');assert.equal(data.profiles[1].course,'batx');assert.equal(P.effective(data.profiles[1],'logic'),'guided');
+ assert.deepEqual(P.sanitize(JSON.parse(JSON.stringify(data))),data);
+});
