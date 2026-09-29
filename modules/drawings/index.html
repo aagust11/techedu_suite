@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f6f2">
   <title>Tecnofigures · Esquemes de tecnologia</title>
-  <link rel="stylesheet" href="styles.css?v=labels1">
-<link rel="stylesheet" href="../../shared/suite.css?v=account1"></head>
+  <link rel="stylesheet" href="styles.css?v=rigging1">
+<link rel="stylesheet" href="../../shared/suite.css?v=rigging1"></head>
 <body data-module="drawings">
   <header class="topbar"><a class="suite-back" href="../../index.html">← TechEdu Suite</a>
     <div class="brand"><span class="brand-icon">▱</span><div><strong>Tecnofigures</strong><small>Estudi de dibuix tecnològic</small></div></div>
@@ -30,7 +30,7 @@
       <div class="section-title">PECES PER AFEGIR <span id="pieceCount"></span></div><div id="pieces" class="pieces"></div>
     </section>
     <section class="editor" aria-label="Editor de dibuix">
-      <div class="editor-header"><div><span class="eyebrow">EL TEU FULL</span><input id="docTitle" aria-label="Títol del dibuix" maxlength="100" value="Dibuix sense títol"></div><div class="tool-row" role="toolbar" aria-label="Eines de dibuix"><button class="tool active" data-tool="select" title="Selecciona (V)">↖ <span>Selecciona</span></button><button class="tool" data-tool="text" title="Afegeix text (T)">T <span>Text</span></button><button class="tool" data-tool="line" title="Dibuixa una línia (L)">╱ <span>Línia</span></button><button class="tool" data-tool="arrow" title="Dibuixa una fletxa (A)">➜ <span>Fletxa</span></button></div></div>
+      <div class="editor-header"><div><span class="eyebrow">EL TEU FULL</span><input id="docTitle" aria-label="Títol del dibuix" maxlength="100" value="Dibuix sense títol"></div><div class="tool-row" role="toolbar" aria-label="Eines de dibuix"><button class="tool active" data-tool="select" title="Selecciona (V)">↖ <span>Selecciona</span></button><button class="tool" data-tool="text" title="Afegeix text (T)">T <span>Text</span></button><button class="tool" data-tool="line" title="Dibuixa una línia (L)">╱ <span>Línia</span></button><button class="tool" data-tool="arrow" title="Dibuixa una fletxa (A)">➜ <span>Fletxa</span></button><button class="tool" data-tool="connect" title="Connecta dos punts amb una corda">⌁ <span>Connecta</span></button></div></div>
       <div id="canvasFrame" class="canvas-frame"><svg id="canvas" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="Full de dibuix tecnològic"><defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#dce3e5"/></pattern><marker id="arrowHead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11" fill="none" stroke="#264a58" stroke-width="2"/></marker></defs><rect width="1200" height="720" fill="#fff"/><rect width="1200" height="720" fill="url(#dots)"/><g id="scene"></g><g id="overlay"></g></svg></div>
       <div class="editor-footer"><span id="hint">Arrossega peces o etiquetes per moure-les per separat · Doble clic per editar el text</span><span id="objectCount">0 elements</span></div>
     </section>
@@ -38,6 +38,6 @@
   </main>
   <input type="file" id="importInput" accept=".json,application/json" hidden>
   <dialog id="exportDialog"><form method="dialog"><div class="dialog-head"><h2>Exporta el dibuix</h2><button aria-label="Tanca">✕</button></div><p>El format JSON conserva les peces editables. SVG i PNG serveixen per inserir el dibuix en documents o presentacions.</p><div class="dialog-actions"><button type="button" data-export="svg">SVG vectorial</button><button type="button" data-export="png">PNG (alta resolució)</button><button type="button" data-export="json">Projecte JSON</button><button type="button" id="importBtn">Importa JSON</button></div></form></dialog>
-  <script src="../../profiles/store.js?v=account1"></script><script src="../../profiles/widget.js?v=quicklevel1" data-domain="drawings"></script><script type="module" src="app.js?v=labels1"></script>
+  <script src="../../profiles/store.js?v=account1"></script><script src="../../profiles/widget.js?v=rigging1" data-domain="drawings"></script><script type="module" src="app.js?v=rigging1"></script>
 <script src="../../shared/learning.js?v=account1"></script></body>
 </html>

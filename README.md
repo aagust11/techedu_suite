@@ -86,3 +86,11 @@ El menú **El meu compte** permet canviar ràpidament l’itinerari ESO/Batxille
 
 ### Edició de Tecnofigures
 Les etiquetes de les peces es poden arrossegar independentment (incloses P, R, fulcre i braços de la palanca); mantenen el desplaçament relatiu quan es mou la peça. L’inspector permet restablir-les. Els eixos tenen longituds horitzontal i vertical editables. Les palanques permeten ocultar l’etiqueta del gènere i configurar P i R cap amunt o cap avall; P també conserva el mode automàtic segons el gènere. Aquests ajustos es desen amb el dibuix, admeten desfer/refer i es conserven als JSON i a les imatges exportades. El dibuix no valida l’equilibri de les forces.
+
+
+### Cordes i elevació
+Tecnofigures incorpora politges amb radi, longituds i angles de corda editables; polispasts de 2, 4, 6 o 8 politges amb separació entre blocs i extrem lliure configurables; cordes, ancoratges, caixes, ganxos i dinamòmetres esquemàtics. L'eina **Connecta** uneix punts de peces o extrems de cordes, i les unions segueixen les peces quan es mouen. L'inspector permet canviar o desconnectar cada extrem; eliminar una peça conserva la corda a la seva última posició. Les connexions es desen per compte i es conserven en exportar/importar JSON, desfer/refer i exportar imatges. Les palanques poden mostrar o ocultar una caixa al punt R.
+
+Els exemples connectats serveixen per construir esquemes: no calculen tensió, equilibri ni moviment. La lectura del dinamòmetre és editable i no és una mesura simulada. Totes les pantalles comparteixen ara la navegació de mòduls, la capçalera de compte i els estils de controls, títols i panells.
+
+Verificació específica: `tests/rigging.test.js` cobreix geometria, dependències i remapatge d'identificadors; `tests/browser-rigging.cjs` comprova edició, connexions, persistència, importació, caixa de la palanca i vista mòbil.

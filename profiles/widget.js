@@ -3,6 +3,11 @@
  const panel=document.createElement('div');panel.className='suite-header techedu-profile-bar';panel.setAttribute('role','banner');
  document.body.prepend(panel);
  document.querySelector('header')?.classList.add('module-toolbar');
+ const navigation=document.createElement('nav');navigation.className='suite-nav';navigation.setAttribute('aria-label','Mòduls de TechEdu Suite');
+ const destinations=[['Inici',''],['Tecnofigures','modules/drawings/'],['Mecanismes','modules/mechanisms/'],['Problemes','modules/problems/'],['Materials','modules/materials/'],['Lògica','modules/logic/'],['Comunicacions','modules/communications/']];
+ for(const [name,path] of destinations){const a=document.createElement('a');a.href=new URL(path||'index.html',base).href;a.textContent=name;const here=location.pathname,target=new URL(a.href).pathname;if(path?here.startsWith(new URL(path,base).pathname):here===target||here===base.pathname)a.setAttribute('aria-current','page');navigation.append(a);}
+ panel.after(navigation);
+
  const guestCourse=()=>{try{return localStorage.getItem('techedu.course')==='batx'?'batx':'eso'}catch{return 'eso'}};
  window.TechEduCurrent=()=>{const profile=P.active();return {profile,course:profile?.course||guestCourse(),level:P.effective(profile,domain),supports:profile?.supports||{shortText:false,stepByStep:false,hideSolution:false}};};
  window.TechEduSetDomain=next=>{domain=next;render()};
