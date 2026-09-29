@@ -64,6 +64,22 @@ const TechEduAlternates={
  [3,'compromisos','Una peça lleugera es deforma massa. Quina modificació cal estudiar mantenint el límit de massa?',['Canviar secció i comparar rigidesa i massa','Triar sempre el material més dens','Canviar només el color'],0],
  [3,'comparació justa','Vols comparar materials amb una prova de flexió. Què mantens igual?',['Només el color','Geometria, suports i càrrega','Només la massa'],1]]
 };
+TechEduBank.communications={title:'TIC i comunicacions',questions:[
+ {tier:1,skill:'amplitud',text:'En una ona representada en volts, l’amplitud indica…',options:['L’altura màxima respecte del nivell de referència','Els cicles per segon','El nombre de bits'],correct:0},
+ {tier:1,skill:'freqüència',text:'Una sinusoide de 4 Hz fa…',options:['4 cicles cada segon','4 volts','4 bits sempre'],correct:0},
+ {tier:2,skill:'atenuació',text:'El canal conserva el 30% d’un senyal d’1 V. Sense soroll, rebem…',options:['0,30 V','0,70 V','3 V'],correct:0},
+ {tier:2,skill:'llindar',text:'El receptor llegeix 1 si V ≥ 0,5 V. Amb 0,3 V llegirà…',options:['0','1','Sempre el bit original'],correct:0},
+ {tier:3,skill:'recuperació',text:'Els nivells rebuts són 0 V i 0,4 V, sense soroll. Quin llindar els separa correctament (1 si V ≥ llindar)?',options:['0 V','0,2 V','0,5 V'],correct:1},
+ {tier:3,skill:'comparació experimental',text:'Per estudiar només l’efecte del llindar amb soroll, cal…',options:['Canviar també el patró de soroll','Mantenir el missatge, el canal i el patró de soroll','Eliminar el missatge'],correct:1}
+]};
+TechEduAlternates.communications=[
+ [1,'amplitud','Dues sinusoides tenen la mateixa freqüència. Si una passa d’1 V a 2 V d’amplitud…',['Augmenta l’altura, no els cicles per segon','Duplica la freqüència','Canvia necessàriament la fase'],0],
+ [1,'freqüència','Una sinusoide fa 10 cicles en 2 s. Quina freqüència té?',['20 Hz','5 Hz','10 Hz'],1],
+ [2,'atenuació','Conservem el 50% d’un nivell de 2 V, sense soroll. Quin nivell rebem?',['0,5 V','1 V','4 V'],1],
+ [2,'llindar','Un 0 enviat arriba alterat a 0,7 V; llindar 0,5 V. Què llegeix el receptor?',['0 sense error','1, amb error','El soroll no afecta mai els bits'],1],
+ [3,'recuperació','Sense soroll, els nivells rebuts són 0 V i 0,3 V. Baixem el llindar de 0,5 V a 0,15 V. Què passa?',['Es recuperen els dos nivells','Tots es llegeixen com 0','Tots es llegeixen com 1'],0],
+ [3,'comparació experimental','Un patró de soroll no provoca errors en 8 bits. Què podem concloure?',['El canal mai tindrà errors','Només aquesta prova no ha tingut errors; cal provar més casos','El soroll no existeix'],1]
+];
 for(const [domain,bank] of Object.entries(TechEduBank)){
  bank.questions.forEach((q,i)=>q.id=domain+'-a-'+i);
  bank.alternates=TechEduAlternates[domain].map(([tier,skill,text,options,correct],i)=>({id:domain+'-b-'+i,tier,skill,text,options,correct}));

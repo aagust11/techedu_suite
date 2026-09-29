@@ -15,7 +15,7 @@ function render(){
  $('#history').innerHTML=p.attempts.length?[...p.attempts].reverse().map(a=>{const result=P.suggest(B[a.domain].resolve(a.questionIds),a.answers);return '<div class="history-item"><b>'+B[a.domain].title+'</b> · '+escapeHTML(a.date.slice(0,10))+' · '+result.score+'/'+result.total+' <span class="badge">Proposta: '+P.labels[result.level]+'</span></div>'}).join(''):'<p class="fine">Encara no hi ha proves desades.</p>';
  const work=P.load().profiles.find(x=>x.id===p.id)?.work||{};
  $('#workOverview').replaceChildren();
- for(const [activity,entry] of Object.entries(work)){if(activity.startsWith('test-'))continue;const a=document.createElement('a');a.href='../modules/'+activity+'/';a.textContent=activity+' · '+(entry.updatedAt||'').slice(0,10)+' · '+(entry.history?.length||0)+' evidències';const row=document.createElement('p');row.append(a);$('#workOverview').append(row);}
+ for(const [activity,entry] of Object.entries(work)){if(activity.startsWith('test-'))continue;const a=document.createElement('a');a.href=activity==='communications-digitization'?'../modules/communications/digitization.html':activity==='communications-encoding'?'../modules/communications/encoding.html':'../modules/'+activity+'/';a.textContent=activity+' · '+(entry.updatedAt||'').slice(0,10)+' · '+(entry.history?.length||0)+' evidències';const row=document.createElement('p');row.append(a);$('#workOverview').append(row);}
 }
 $('#addForm').onsubmit=e=>{
  e.preventDefault();const name=$('#newName').value.trim();if(!name)return;

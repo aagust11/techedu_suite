@@ -1,0 +1,18 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.DigitalCore=api;})(globalThis,function(){
+ function number(value,min,max,label,integer=false){const n=Number(value);if(!Number.isFinite(n)||n<min||n>max||(integer&&!Number.isInteger(n)))throw Error('Valor invàlid: '+label);return n;}
+ function quantize(value,bits){bits=number(bits,1,8,'bits',true);const levels=2**bits,code=Math.round((Math.max(-1,Math.min(1,value))+1)/2*(levels-1));return {code,value:code/(levels-1)*2-1,binary:code.toString(2).padStart(bits,'0')};}
+ function sample(raw={}){
+  const c={frequency:3,amplitude:.8,phase:0,sampleRate:16,depth:3,...raw};
+  c.frequency=number(c.frequency,.5,12,'freqüència');c.amplitude=number(c.amplitude,.1,1,'amplitud');c.phase=number(c.phase,0,360,'fase');c.sampleRate=number(c.sampleRate,2,64,'mostres/s',true);c.depth=number(c.depth,1,8,'bits/mostra',true);
+  const original=t=>c.amplitude*Math.sin(2*Math.PI*c.frequency*t+c.phase*Math.PI/180),duration=2;
+  const samples=Array.from({length:duration*c.sampleRate},(_,i)=>{const t=i/c.sampleRate,v=original(t);return {t,original:v,...quantize(v,c.depth)}});
+  const alias=((c.frequency+c.sampleRate/2)%c.sampleRate+c.sampleRate)%c.sampleRate-c.sampleRate/2;
+  return {config:c,duration,samples,alias,undersampled:c.sampleRate<=2*c.frequency,step:2/(2**c.depth-1),payloadBits:samples.length*c.depth,maxError:Math.max(...samples.map(s=>Math.abs(s.original-s.value))),curve:Array.from({length:1601},(_,i)=>{const t=duration*i/1600;return {t,original:original(t),held:samples[Math.min(samples.length-1,Math.floor(t*c.sampleRate))].value,alias:c.amplitude*Math.sin(2*Math.PI*alias*t+c.phase*Math.PI/180)}})};
+ }
+ function encodeText(text){if(typeof text!=='string'||text.length>120)throw Error('Màxim 120 unitats de text.');const bytes=[...new TextEncoder().encode(text)];return {bytes,binary:bytes.map(b=>b.toString(2).padStart(8,'0')).join(' '),symbols:Array.from(text).map(char=>({char,bytes:[...new TextEncoder().encode(char)]})),bits:bytes.length*8};}
+ function parseBinary(binary){if(typeof binary!=='string'||/[^01\s]/.test(binary))throw Error('Només es permeten 0, 1 i espais.');const compact=binary.replace(/\s/g,'');if(compact.length%8)throw Error('Calen grups complets de 8 bits per byte.');if(compact.length>4096)throw Error('Màxim 512 bytes.');return Array.from({length:compact.length/8},(_,i)=>parseInt(compact.slice(i*8,i*8+8),2));}
+ function decodeText(binary){const bytes=parseBinary(binary);try{return new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(new Uint8Array(bytes));}catch{throw Error('Aquests bytes no formen una seqüència UTF-8 vàlida.');}}
+ function flip(binary,index){const bytes=parseBinary(binary),compact=bytes.map(b=>b.toString(2).padStart(8,'0')).join('');index=number(index,1,compact.length,'posició del bit',true)-1;const altered=compact.slice(0,index)+(compact[index]==='0'?'1':'0')+compact.slice(index+1);return altered.match(/.{8}/g).join(' ');}
+ function pixels(values,depth){depth=number(depth,1,8,'bits/píxel',true);if(![1,2,4,8].includes(depth))throw Error('Tria 1, 2, 4 o 8 bits per píxel.');if(!Array.isArray(values)||values.length!==64||values.some(v=>!Number.isInteger(v)||v<0||v>255))throw Error('Cal una imatge de 8 × 8 amb valors de 0 a 255.');const levels=2**depth,codes=values.map(v=>Math.round(v/255*(levels-1))),decoded=codes.map(c=>Math.round(c/(levels-1)*255));return {codes,decoded,levels,bits:64*depth,binary:codes.map(c=>c.toString(2).padStart(depth,'0')).join(' ')};}
+ return {quantize,sample,encodeText,parseBinary,decodeText,flip,pixels};
+});

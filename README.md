@@ -47,3 +47,14 @@ LogicLab, TechProblems, MaterialsLab i MechanismLab conserven l’esborrany del 
 Els errors de quota i els conflictes detectats amb altres pestanyes es mostren sense indicar un desament reeixit. Els perfils anteriors són compatibles. No hi ha sincronització remota ni diagnòstic psicomètric: les dues versions de cada prova inicial orienten el docent, que decideix si aplica la proposta. Els suports es poden combinar amb els reptes d’ampliació.
 
 Validació: `node --test tests/*.test.js`. La regressió de navegador és a `tests/browser-progress.cjs`; necessita Playwright disponible (o `PLAYWRIGHT_MODULE` amb el camí del mòdul) i un servidor local, per defecte a `http://localhost:8765` (`BASE_URL` configurable).
+
+
+### CommunicationsLab: senyals, digitalització i codificació
+
+- `modules/communications/`: sinusoide analògica o bits NRZ, guany del canal, soroll determinista i interferència periòdica. El receptor llegeix al centre de cada bit amb un llindar ajustable. Comparació A/B amb el mateix soroll, recompte d’errors de la prova i activitats per nivell.
+- `modules/communications/digitization.html`: captura de 2 segons, freqüència de mostreig, fase, amplitud i 1–8 bits per mostra. Gràfic de mostres, quantificació uniforme, sortida mantinguda i ona compatible en casos d’aliasing. Mostra la mida de les dades, l’error de quantificació i una comparació A/B.
+- `modules/communications/encoding.html`: UTF-8 real amb accents, emojis i combinacions Unicode; edició de bits i descodificació estricta. Un byte original es pot portar al canal mitjançant el fragment de l’URL, sense enviar-lo al servidor. Editor de 8 × 8 píxels amb 1, 2, 4 o 8 bits de gris, reconstrucció i mida sense capçalera.
+
+Els tres laboratoris comparteixen el perfil d’àmbit «TIC i comunicacions», però tenen esborranys i evidències independents. Les proves inicials d’aquest àmbit comproven els fonaments del senyal i el canal. Els models expliciten les simplificacions: canal ideal en banda base, lectura sincronitzada, soroll sintètic, absència de filtres antialiasing, i sortida mantinguda que no s’ha de confondre amb una reconstrucció ideal. La codificació no és compressió ni xifrat.
+
+Verificació: `node --test tests/*.test.js` (16 proves). Amb Playwright instal·lat i servidor local: `node tests/browser-signals.cjs` i `node tests/browser-digital.cjs`; `BASE_URL` per defecte `http://localhost:8766`. Comproven canvis de perfil, desament, mostreig, UTF-8, transferència del byte, píxels, resultats ocults i amplada mòbil. `tests/browser-progress.cjs` verifica els mòduls previs.
