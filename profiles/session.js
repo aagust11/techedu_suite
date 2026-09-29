@@ -7,7 +7,7 @@
  const style=document.createElement('style');style.textContent='.work-session{margin:24px;padding:20px;background:#f1f6f3;border:1px solid #c5ded2;border-radius:12px;color:#183d37;font:14px system-ui}.work-session label{display:block;margin:12px 0}.work-session textarea,.reasoning{display:block;box-sizing:border-box;width:100%;min-height:75px;font:inherit;padding:9px}.work-session button{margin:6px}.work-session #workStatus{font-weight:600}';document.head.append(style);
  let owner=null,record=null,restoring=false,blocked=false,ready=false;
  const status=message=>document.querySelector('#workStatus').textContent=message;
- function elements(){return [...document.querySelectorAll('main input,main select,main textarea,aside input,aside select,.work-session textarea')].filter(e=>e.type!=='file'&&!e.closest('#gear-editor')&&(e.id||e.dataset.index!==undefined));}
+ function elements(){return [...document.querySelectorAll('main input,main select,main textarea,aside input,aside select,.work-session textarea')].filter(e=>e.type!=='file'&&!e.readOnly&&!e.closest('#gear-editor')&&(e.id||e.dataset.index!==undefined));}
  function key(e){return e.id||e.className+':'+e.dataset.index;}
  function capture(){return {fields:Object.fromEntries(elements().map(e=>[key(e),e.type==='checkbox'||e.type==='radio'?e.checked:e.value])),feedback:Object.fromEntries([...document.querySelectorAll('[role="status"]')].filter(e=>e.id!=='workStatus'&&e.id!=='profileHint').map(e=>[e.id||'feedback:'+e.dataset.index,e.textContent]))};}
  function restoreFields(state){
@@ -26,11 +26,11 @@
  }
  function history(){
   const container=document.querySelector('#workHistory');container.replaceChildren();
-  (record?.history||[]).slice().reverse().forEach(item=>{const button=document.createElement('button');button.type='button';button.textContent='Reprèn '+new Date(item.at).toLocaleString('ca');button.onclick=()=>{if(!persist())return;apply(item.draft);persist('reprendre evidència')};container.append(button)});
+  (record?.history||[]).slice().reverse().forEach(item=>{const button=document.createElement('button');button.type='button';button.textContent='Reprèn '+(typeof item.draft?.extra?.label==='string'?item.draft.extra.label.slice(0,100)+' · ':'')+new Date(item.at).toLocaleString('ca');button.onclick=()=>{if(!persist())return;apply(item.draft);persist('reprendre evidència')};container.append(button)});
  }
  function apply(draft){
   restoring=true;
-  try{restoreFields(draft);window.TechEduActivity?.restore?.(draft?.extra);restoreFields(draft);}catch(e){blocked=true;status('No es pot recuperar aquesta activitat: '+e.message)}finally{restoring=false}
+  try{restoreFields(draft);window.TechEduActivity?.restore?.(draft?.extra);restoreFields(draft);window.TechEduActivity?.afterRestore?.();}catch(e){blocked=true;status('No es pot recuperar aquesta activitat: '+e.message)}finally{restoring=false}
  }
  function archive(){
   if(!owner)return true;
@@ -52,6 +52,7 @@
   if(!record&&moduleId==='problems'){document.querySelector('#difficulty').value={guided:'1',standard:'2',extension:'3'}[current.level];document.querySelector('#count').value=current.level==='guided'?2:current.level==='extension'?3:4;window.TechEduActivity.restore({});}
   if(record?.draft)apply(record.draft);
   else if(moduleId==='logic')window.TechEduActivity?.restore?.();
+  window.TechEduActivity?.activate?.({restored:!!record?.draft});
   history();if(!blocked)status(owner?(record?'Treball recuperat.':'Preparat per desar el treball.'): 'Selecciona un perfil per desar i reprendre el treball.');
  }
  function init(){defaults={...capture(),extra:extra()};activate();}
