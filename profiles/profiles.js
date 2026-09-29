@@ -8,22 +8,23 @@ function render(){
  const p=current();$('#empty').hidden=!!p;$('#editor').hidden=!p;
  $('#profileList').innerHTML=data.profiles.map(x=>'<button type="button" data-id="'+escapeHTML(x.id)+'" class="'+(x.id===data.activeId?'active':'')+'">'+escapeHTML(x.name)+'<small>'+P.labels[x.level]+'</small></button>').join('')||'<p class="fine">Encara no hi ha cap perfil.</p>';
  if(!p)return;
- $('#profileTitle').textContent=p.name;$('#profileName').value=p.name;$('#generalLevel').value=p.level;
+ $('#profileTitle').textContent=p.name;$('#profileName').value=p.name;$('#generalLevel').value=p.level;$('#course').value=p.course;
  for(const key of Object.keys(p.supports))$('#'+key).checked=p.supports[key];
  $('#domainLevels').innerHTML=P.DOMAINS.map(d=>'<label>'+B[d].title+'<select data-domain="'+d+'"><option value="">Segons l’orientació general</option>'+P.LEVELS.map(level=>'<option value="'+level+'" '+(p.domains[d]===level?'selected':'')+'>'+P.labels[level]+'</option>').join('')+'</select></label>').join('');
  $('#testButtons').innerHTML=P.DOMAINS.map(d=>'<button type="button" data-test="'+d+'" class="'+(testDomain===d?'active':'')+'">'+B[d].title+'</button>').join('');
  $('#history').innerHTML=p.attempts.length?[...p.attempts].reverse().map(a=>{const result=P.suggest(B[a.domain].resolve(a.questionIds),a.answers);return '<div class="history-item"><b>'+B[a.domain].title+'</b> · '+escapeHTML(a.date.slice(0,10))+' · '+result.score+'/'+result.total+' <span class="badge">Proposta: '+P.labels[result.level]+'</span></div>'}).join(''):'<p class="fine">Encara no hi ha proves desades.</p>';
  const work=P.load().profiles.find(x=>x.id===p.id)?.work||{};
  $('#workOverview').replaceChildren();
- for(const [activity,entry] of Object.entries(work)){if(activity.startsWith('test-'))continue;const a=document.createElement('a');a.href=activity==='communications-digitization'?'../modules/communications/digitization.html':activity==='communications-encoding'?'../modules/communications/encoding.html':activity==='communications-errors'?'../modules/communications/errors.html':activity==='communications-packets'?'../modules/communications/packets.html':'../modules/'+activity+'/';a.textContent=activity+' · '+(entry.updatedAt||'').slice(0,10)+' · '+(entry.history?.length||0)+' evidències';const row=document.createElement('p');row.append(a);$('#workOverview').append(row);}
+ for(const [activity,entry] of Object.entries(work)){if(activity.startsWith('test-'))continue;const a=document.createElement('a');a.href=activity==='communications-digitization'?'../modules/communications/digitization.html':activity==='communications-encoding'?'../modules/communications/encoding.html':activity==='communications-errors'?'../modules/communications/errors.html':activity==='communications-packets'?'../modules/communications/packets.html':'../modules/'+activity+'/';a.textContent=({drawings:'Tecnofigures',logic:'Lògica',problems:'Problemes',materials:'Materials',mechanisms:'Mecanismes',communications:'Senyals','communications-digitization':'Digitalització','communications-encoding':'Codificació','communications-errors':'Detecció d’errors','communications-packets':'Paquets'}[activity]||activity)+' · '+(entry.updatedAt||'').slice(0,10)+' · '+(entry.history?.length||0)+' evidències';const row=document.createElement('p');row.append(a);$('#workOverview').append(row);}
 }
 $('#addForm').onsubmit=e=>{
  e.preventDefault();const name=$('#newName').value.trim();if(!name)return;if(data.profiles.length>=100){$('#saveStatus').textContent='Màxim de 100 perfils locals. Exporta una còpia abans d’eliminar perfils.';return;}
- const p={id:crypto.randomUUID(),name,level:'standard',domains:Object.fromEntries(P.DOMAINS.map(d=>[d,null])),supports:{shortText:false,stepByStep:false,hideSolution:false},attempts:[]};
+ const p={id:crypto.randomUUID(),name,course:'eso',level:'standard',domains:Object.fromEntries(P.DOMAINS.map(d=>[d,null])),supports:{shortText:false,stepByStep:false,hideSolution:false},attempts:[]};
  data.profiles.push(p);data.activeId=p.id;testDomain=null;lastResult=null;commit();$('#newName').value='';$('#testArea').innerHTML='';render();
 };
 $('#profileList').onclick=e=>{const button=e.target.closest('[data-id]');if(!button)return;data.activeId=button.dataset.id;testDomain=null;lastResult=null;$('#testArea').innerHTML='';commit();render()};
 $('#profileName').onchange=e=>{const p=current();if(!p)return;const name=e.target.value.trim().slice(0,60);if(!name){e.target.value=p.name;return}p.name=name;commit();render()};
+$('#course').onchange=e=>{current().course=e.target.value;commit();render()};
 $('#generalLevel').onchange=e=>{current().level=e.target.value;commit();render()};
 $('#domainLevels').onchange=e=>{if(!e.target.matches('[data-domain]'))return;current().domains[e.target.dataset.domain]=e.target.value||null;commit();render()};
 for(const key of ['shortText','stepByStep','hideSolution'])$('#'+key).onchange=e=>{current().supports[key]=e.target.checked;commit()};

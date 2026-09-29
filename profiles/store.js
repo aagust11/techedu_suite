@@ -14,7 +14,7 @@
   function cleanWork(work){
     if(!work||typeof work!=='object'||Array.isArray(work))return {};
     const result={};
-    for(const key of ['logic','problems','materials','mechanisms','test-logic','test-mechanisms','test-electricity','test-materials','communications','test-communications','communications-digitization','communications-encoding','communications-errors','communications-packets']){
+    for(const key of ['logic','problems','materials','mechanisms','test-logic','test-mechanisms','test-electricity','test-materials','communications','test-communications','communications-digitization','communications-encoding','communications-errors','communications-packets','drawings']){
       const w=work[key];
       if(w&&typeof w==='object'&&Number.isInteger(w.revision)&&w.revision>=0&&JSON.stringify(w).length<500000&&safeJSON(w)){
         result[key]={revision:w.revision,updatedAt:typeof w.updatedAt==='string'?w.updatedAt:'',draft:w.draft&&typeof w.draft==='object'?w.draft:null,history:Array.isArray(w.history)?w.history.filter(x=>x&&typeof x.at==='string'&&x.draft&&typeof x.draft==='object').slice(-12):[],events:Array.isArray(w.events)?w.events.slice(-200):[]};
@@ -29,7 +29,7 @@
     const domains=Object.fromEntries(DOMAINS.map(d=>[d,LEVELS.includes(p.domains?.[d])?p.domains[d]:null]));
     const supports={shortText:!!p.supports?.shortText,stepByStep:!!p.supports?.stepByStep,hideSolution:!!p.supports?.hideSolution};
     const attempts=Array.isArray(p.attempts)?p.attempts.filter(a=>DOMAINS.includes(a.domain)&&Array.isArray(a.answers)&&typeof a.date==='string').slice(-40).map(a=>({domain:a.domain,date:a.date.slice(0,30),answers:a.answers.slice(0,12).map(x=>Number.isInteger(x)?x:-1),questionIds:Array.isArray(a.questionIds)?a.questionIds.slice(0,12).map(String):null,bankVersion:a.bankVersion||1})):[];
-    return {id:p.id.slice(0,100),name,level,domains,supports,attempts,work:cleanWork(p.work)};
+    return {id:p.id.slice(0,100),name,course:p.course==='batx'?'batx':'eso',level,domains,supports,attempts,work:cleanWork(p.work)};
   }
   function sanitize(data){
     const profiles=(Array.isArray(data?.profiles)?data.profiles:[]).slice(0,100).map(cleanProfile).filter(Boolean);

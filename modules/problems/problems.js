@@ -9,9 +9,9 @@ function problem(type,d){
   return {title:'Tren compost d’engranatges',q:`Un motor gira a <b>${n1} rpm</b>. La roda 1 (${z1} dents) mou la 2 (${z2}); al mateix eix hi ha la 3 (${z3}), que mou la 4 (${z4}). Calcula les rpm finals.`,guide:['Calcula n₂ amb n₁·z₁=n₂·z₂.','Les rodes 2 i 3 comparteixen eix: n₂=n₃.','Calcula n₄ i compara-la amb n₁.'],answer:n4,unit:'rpm',s:`n₂=${n2.toFixed(1)} rpm; n₃=n₂; n₄=n₃·${z3}/${z4}=<b>${n4.toFixed(1)} rpm</b>.`,extra:'Prediu el sentit de gir de la roda 4 respecte de la 1 i justifica els dos contactes entre rodes.',extraSolution:'Hi ha dos contactes exteriors; cada contacte inverteix el sentit. La roda 4 gira en el mateix sentit que la 1.'};
  }
  if(type==='lever'){
-  const genre=ri(1,3),P=ri(d===1?4:8,d===1?16:40)*10;
-  const bp10=genre===2?ri(8,20):genre===3?ri(3,9):ri(5,18);
-  const br10=genre===2?ri(2,bp10-2):genre===3?ri(bp10+2,20):ri(5,18);
+  const genre=d===1?1:ri(1,3),P=ri(d===1?4:8,d===1?16:40)*10;
+  const bp10=d===1?10:genre===2?ri(8,20):genre===3?ri(3,9):ri(5,18);
+  const br10=d===1?5:genre===2?ri(2,bp10-2):genre===3?ri(bp10+2,20):ri(5,18);
   const m=LeverModel.create(genre,P,bp10/10,br10/10),num=LeverModel.num;
   return {title:`Palanca de ${{1:'1r',2:'2n',3:'3r'}[genre]} gènere`,diagram:LeverModel.svg(m),editURL:`../drawings/?lever=${genre},${P},${m.bp},${m.br}`,q:`Una potència de <b>${P} N</b> actua a <b>${num(m.bp)} m</b> del fulcre. La resistència és a <b>${num(m.br)} m</b>. Calcula R per mantenir l’equilibri.`,guide:['Localitza fulcre, P i R. Quin queda entre els altres dos?','Els braços es mesuren sempre des del fulcre. Identifica bₚ i bᵣ.','Escriu P·bₚ=R·bᵣ i aïlla R.'],answer:m.resistance,unit:'N',s:`R=(${P}·${num(m.bp)})/${num(m.br)}=<b>${num(m.resistance)} N</b>.`,extra:'Si el braç de potència es reduís a la meitat, com canviaria la resistència equilibrada sense variar P ni bᵣ?',extraSolution:'R també es reduiria a la meitat perquè R és proporcional a bₚ.'};
  }
@@ -29,7 +29,7 @@ function problem(type,d){
 function paint(){
  const previous=window.TechEduCapture?.();
  const show=$('#solutions').checked,guide=$('#guided').checked,level=window.TechEduCurrent?.().level||'standard';
- $('#output').innerHTML=generated.map((p,i)=>`<article><small>VARIANT ${i+1}</small><h2>${p.title}</h2><p>${window.TechEduCurrent?.().supports.shortText?p.q.replaceAll('. ','.<br>'):p.q}</p>${p.diagram||''}${p.editURL?`<p><a href="${p.editURL}" target="_blank" rel="noopener">Edita aquesta palanca a TechDrawings →</a></p>`:''}${guide?`<div class="solution"><b>Passos concrets</b><ol>${p.guide.map(x=>'<li>'+x+'</li>').join('')}</ol></div>`:''}<label>Resposta (${p.unit})<input class="answer" data-index="${i}" inputmode="decimal" placeholder="Escriu un nombre"></label><button class="check-answer" data-index="${i}">Comprova</button><p class="feedback" data-index="${i}" role="status"></p>${level==='extension'?`<div class="extension"><b>Repte de transferència</b><p>${p.extra}</p><label>Predicció i justificació<textarea class="reasoning" data-index="${i}"></textarea></label>${show?'<p>'+p.extraSolution+'</p>':''}</div>`:''}${show?`<div class="solution"><b>Resolució</b><p>${p.s}</p></div>`:''}</article>`).join('');
+ $('#output').innerHTML=generated.map((p,i)=>`<article><small>VARIANT ${i+1}</small><h2>${p.title}</h2><p>${window.TechEduCurrent?.().supports.shortText?p.q.replaceAll('. ','.<br>'):p.q}</p>${p.diagram||''}${p.editURL?`<p><a href="${p.editURL}" target="_blank" rel="noopener">Edita aquesta palanca a Tecnofigures →</a></p>`:''}${guide?`<div class="solution"><b>Passos concrets</b><ol>${p.guide.map(x=>'<li>'+x+'</li>').join('')}</ol></div>`:''}<label>Resposta (${p.unit})<input class="answer" data-index="${i}" inputmode="decimal" placeholder="Escriu un nombre"></label><button class="check-answer" data-index="${i}">Comprova</button><p class="feedback" data-index="${i}" role="status"></p>${level==='extension'?`<div class="extension"><b>Repte de transferència</b><p>${p.extra}</p><label>Predicció i justificació<textarea class="reasoning" data-index="${i}"></textarea></label>${show?'<p>'+p.extraSolution+'</p>':''}</div>`:''}${show?`<div class="solution"><b>Resolució</b><p>${p.s}</p></div>`:''}</article>`).join('');
  if(previous)window.TechEduRestoreFields?.(previous);
 
 }
