@@ -1,0 +1,13 @@
+// Account-scoped drafts with optimistic concurrency, including a separate visitor draft.
+export function workspace(activity,defaults,clean,onLoad){
+ const P=window.TechEduProfiles,key='techedu.guest.'+activity;let owner,record,blocked=false,initialized=false;
+ const status=t=>{document.querySelector('#saveStatus').textContent=t};
+ function read(){return owner?P.readWork(owner,activity):JSON.parse(localStorage.getItem(key)||'null')}
+ function activate(){const next=P.active()?.id||null;if(initialized&&next===owner)return;owner=next;initialized=true;blocked=false;try{record=read();onLoad(clean(record?.draft?.extra??defaults()));status(record?'Treball recuperat en aquest navegador.':'Preparat · desament local automàtic.')}catch(e){record=null;blocked=true;onLoad(defaults());status('No es pot recuperar el treball: '+e.message)}}
+ function save(value){if(blocked)return false;try{if((P.active()?.id||null)!==owner)throw Error('El compte ha canviat. Recarrega.');const draft={extra:clean(value)};if(JSON.stringify(draft).length>400000)throw Error('La fitxa és massa gran. Redueix les imatges o exporta-la.');if((read()?.revision||0)!==(record?.revision||0))throw Error('Hi ha canvis en una altra pestanya. Recarrega abans de continuar.');const next={draft,history:[],events:[]};if(owner)record=P.writeWork(owner,activity,next,record?.revision||0);else{const written={...next,revision:(record?.revision||0)+1};localStorage.setItem(key,JSON.stringify(written));record=written;}status('Desat en aquest navegador'+(owner?' · compte actiu':' · Visitant'));return true}catch(e){blocked=true;status('No s’ha desat: '+e.message+' Exporta una còpia abans de recarregar.');return false}}
+ window.addEventListener('techedu-level',activate);window.addEventListener('storage',e=>{if(e.key===P.KEY||e.key===key){if((P.active()?.id||null)!==owner){activate();return}try{if((read()?.revision||0)!==(record?.revision||0)){blocked=true;status('El treball ha canviat en una altra pestanya. Exporta els canvis pendents i recarrega.')}}catch{blocked=true;status('No es pot llegir el desament. Exporta una còpia.')}}});
+ activate();return {save};
+}
+export function downloadJSON(value,name){const a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+export const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function sendToWorksheet(blocks){const packet={owner:window.TechEduProfiles.active()?.id||null,blocks};sessionStorage.setItem('techedu.worksheet.transfer',JSON.stringify(packet));location.href=new URL('../worksheet/',location.href).href}
