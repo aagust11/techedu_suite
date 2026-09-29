@@ -81,3 +81,8 @@ El curs (`eso` o `batx`) és independent del grau de pauta (`guided`, `standard`
 Totes les pantalles comparteixen `shared/suite.css`, capçalera, menú de compte, colors, controls de focus i guies del curs. Les eines especialitzades mantenen el seu espai de treball. Els continguts d’aprofundiment (Karnaugh, Young i repte de transmissió) s’identifiquen i es despleguen separadament del recorregut inicial.
 
 Validació del compte i dels itineraris: `tests/browser-account.cjs` comprova migració, independència entre curs i suports, reptes ESO/Batxillerat, separació dels dibuixos entre comptes, exportació i amplada mòbil de totes les pantalles. Sis recorreguts de navegador en total.
+
+El menú **El meu compte** permet canviar ràpidament l’itinerari ESO/Batxillerat i el grau de pauta. Dins d’un àmbit canvia la seva orientació, amb l’opció de tornar a heretar el nivell general; a la portada i al compte ajusta el nivell general. El canvi s’aplica al moment i es desa localment, conserva el treball en curs i mostra un error si no es pot desar. `tests/browser-quicklevel.cjs` verifica persistència, abast, herència, canvi de compte i fallades de quota.
+
+### Edició de Tecnofigures
+Les etiquetes de les peces es poden arrossegar independentment (incloses P, R, fulcre i braços de la palanca); mantenen el desplaçament relatiu quan es mou la peça. L’inspector permet restablir-les. Els eixos tenen longituds horitzontal i vertical editables. Les palanques permeten ocultar l’etiqueta del gènere i configurar P i R cap amunt o cap avall; P també conserva el mode automàtic segons el gènere. Aquests ajustos es desen amb el dibuix, admeten desfer/refer i es conserven als JSON i a les imatges exportades. El dibuix no valida l’equilibri de les forces.
