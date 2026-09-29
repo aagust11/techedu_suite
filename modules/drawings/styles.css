@@ -3,3 +3,5 @@
 .suite-back{color:#254b59;font-weight:800;text-decoration:none;margin-right:12px}.suite-back:hover{text-decoration:underline}
 
 #canvas .movable-label{cursor:move}#canvas .movable-label:hover text{paint-order:stroke;stroke:#ffe0bd;stroke-width:5px}.properties input[type=checkbox]{width:auto;justify-self:start}
+
+.connection-port{fill:#fff4e7;stroke:#c65a28;stroke-width:3;cursor:crosshair}.connection-port:hover,.connection-port:focus{fill:#e66a38;outline:none;stroke-width:5}.properties fieldset{min-width:0;border:1px solid #d9dedb;border-radius:8px;padding:10px;display:grid;gap:10px}.properties select{width:100%;min-width:0;padding:8px;border:1px solid #d9dedb;border-radius:7px;background:white;color:#172a33}.properties legend{font-weight:700;font-size:12px}.tool-row{flex-wrap:wrap}.editor-header{flex-wrap:wrap}
