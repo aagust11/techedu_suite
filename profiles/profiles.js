@@ -68,3 +68,6 @@ $('#importData').onchange=async e=>{
  }catch(err){alert('No s’ha pogut importar: '+err.message)}finally{e.target.value=''}
 };
 render();
+
+// Keep the account form in sync with its global quick controls, including quiz revision.
+window.TechEduRefreshAccount=()=>{data=P.load();render()};

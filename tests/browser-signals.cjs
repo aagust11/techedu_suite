@@ -18,7 +18,7 @@ const BASE=process.env.BASE_URL||'http://localhost:8766';
  await set('threshold',.15);assert.match(await page.locator('#metrics').textContent(),/0\/8/);
  await page.locator('#workConclusion').fill('0,30 V supera 0,15 V: es recuperen els bits 1.');
  await page.locator('#workFinish').click();await page.reload();assert.equal(await page.locator('#gain').inputValue(),'0.3');assert.equal(await page.locator('#threshold').inputValue(),'0.15');assert.match(await page.locator('#comparisonResult').textContent(),/Prova A: 0\/8/);assert.match(await page.locator('#workConclusion').inputValue(),/recuperen/);
- const selector=page.locator('.techedu-profile-bar select'),ids=await selector.locator('option').evaluateAll(es=>es.map(e=>e.value));
+ const selector=page.getByLabel('Compte actiu',{exact:true}),ids=await selector.locator('option').evaluateAll(es=>es.map(e=>e.value));
  await page.locator('.account-menu').evaluate(el=>el.open=true);await selector.selectOption(ids[2]);assert.equal(await page.locator('#workConclusion').inputValue(),'');assert.equal(await page.locator('#gain').inputValue(),'1');assert.match(await page.locator('#comparisonSummary').textContent(),/Encara/);
  await page.locator('#loadChallenge').click();assert.equal(await page.locator('#noise').inputValue(),'0.25');await page.locator('.controls details summary').click();await page.locator('#newNoise').click();assert.equal(await page.locator('#seed').inputValue(),'43');
  await page.locator('.account-menu').evaluate(el=>el.open=true);await selector.selectOption(ids[1]);assert.equal(await page.locator('#threshold').inputValue(),'0.15');assert.match(await page.locator('#workConclusion').inputValue(),/recuperen/);
