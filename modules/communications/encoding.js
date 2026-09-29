@@ -11,12 +11,12 @@
    $('decodeStatus').textContent='UTF-8 vàlid. '+(bytes.length===original.length?changes+' bits diferents respecte de l’original.':'La longitud en bytes és diferent de l’original.')+(text===$('message').value?' El text coincideix.':' El text ha canviat.');
   }catch(e){$('decodedText').textContent='';$('decodeStatus').textContent='No s’ha pogut descodificar: '+e.message;}
  }
- function byteLink(){const bytes=encoded?.bytes||[],index=Number($('byteChoice').value);const valid=Number.isInteger(index)&&index>=0&&index<bytes.length;$('sendByte').hidden=!valid;if(valid)$('sendByte').href='./#bits='+bytes[index].toString(2).padStart(8,'0');}
+ function byteLink(){const bytes=encoded?.bytes||[],index=Number($('byteChoice').value);const valid=Number.isInteger(index)&&index>=0&&index<bytes.length;$('sendByte').hidden=$('sendErrorByte').hidden=!valid;if(valid){const bits=bytes[index].toString(2).padStart(8,'0');$('sendByte').href='./#bits='+bits;$('sendErrorByte').href='errors.html#payload='+bits;}}
  function textRender(){
   try{encoded=D.encodeText($('message').value);$('textMetrics').innerHTML=[[encoded.symbols.length,'punts de codi Unicode'],[encoded.bytes.length,'bytes UTF-8'],[encoded.bits,'bits de dades']].map(([n,label])=>`<div class="metric"><b>${n}</b><span>${label}</span></div>`).join('');
    $('symbolRows').replaceChildren(...encoded.symbols.map(s=>{const tr=document.createElement('tr');for(const value of [(s.char===' '?'␠':s.char==='\n'?'↵':s.char)+' · U+'+s.char.codePointAt(0).toString(16).toUpperCase(),s.bytes.join(' '),s.bytes.map(b=>b.toString(2).padStart(8,'0')).join(' ')]){const td=document.createElement('td');td.textContent=value;tr.append(td);}return tr;}));
    const old=$('byteChoice').value;$('byteChoice').replaceChildren(...encoded.bytes.map((b,i)=>{const o=document.createElement('option');o.value=i;o.textContent='Byte '+(i+1)+' · '+b.toString(2).padStart(8,'0');return o}));$('byteChoice').value=old!==''&&Number(old)>=0&&Number(old)<encoded.bytes.length?old:'0';$('bitToFlip').max=Math.max(1,encoded.bits);byteLink();
-  }catch(e){encoded=null;$('textMetrics').replaceChildren();$('symbolRows').replaceChildren();$('byteChoice').replaceChildren();$('sendByte').hidden=true;$('decodeError').textContent=e.message;$('decodeError').hidden=false;return;}
+  }catch(e){encoded=null;$('textMetrics').replaceChildren();$('symbolRows').replaceChildren();$('byteChoice').replaceChildren();$('sendByte').hidden=$('sendErrorByte').hidden=true;$('decodeError').textContent=e.message;$('decodeError').hidden=false;return;}
   decode();const visible=$('reveal').checked;$('textMeasures').hidden=!visible;$('decodedResults').hidden=!visible;$('receivedBits').parentElement.hidden=!visible;document.querySelectorAll('#textPanel .byte-tools').forEach(e=>e.hidden=!visible);
  }
  function pixelRender(){

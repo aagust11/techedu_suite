@@ -14,7 +14,7 @@
   function cleanWork(work){
     if(!work||typeof work!=='object'||Array.isArray(work))return {};
     const result={};
-    for(const key of ['logic','problems','materials','mechanisms','test-logic','test-mechanisms','test-electricity','test-materials','communications','test-communications','communications-digitization','communications-encoding']){
+    for(const key of ['logic','problems','materials','mechanisms','test-logic','test-mechanisms','test-electricity','test-materials','communications','test-communications','communications-digitization','communications-encoding','communications-errors','communications-packets']){
       const w=work[key];
       if(w&&typeof w==='object'&&Number.isInteger(w.revision)&&w.revision>=0&&JSON.stringify(w).length<500000&&safeJSON(w)){
         result[key]={revision:w.revision,updatedAt:typeof w.updatedAt==='string'?w.updatedAt:'',draft:w.draft&&typeof w.draft==='object'?w.draft:null,history:Array.isArray(w.history)?w.history.filter(x=>x&&typeof x.at==='string'&&x.draft&&typeof x.draft==='object').slice(-12):[],events:Array.isArray(w.events)?w.events.slice(-200):[]};
@@ -69,5 +69,12 @@
     if(JSON.stringify(record).length>=500000)throw Error('El treball supera la mida disponible per activitat.');
     p.work[activity]=record;localStorage.setItem(KEY,JSON.stringify(data));return record;
   }
-  return {readWork,writeWork,KEY,LEVELS,DOMAINS,labels,defaults,sanitize,load,save,active,effective,suggest};
+  function finishTest(id,domain,attempt,revision,metaRevision){
+    const raw=localStorage.getItem(KEY),data=raw?sanitize(JSON.parse(raw)):defaults(),p=data.profiles.find(x=>x.id===id),activity='test-'+domain;
+    if(!p||!DOMAINS.includes(domain))throw Error('Perfil o prova no disponible.');
+    if(data.metaRevision!==metaRevision||(p.work[activity]?.revision||0)!==revision)throw Error('La prova o el perfil ha canviat en una altra pestanya. No s’ha esborrat l’esborrany. Recarrega.');
+    p.attempts.push(attempt);p.attempts=p.attempts.slice(-40);p.work[activity]={revision:revision+1,updatedAt:new Date().toISOString(),draft:null,history:[],events:[]};data.metaRevision++;
+    const clean=sanitize(data);localStorage.setItem(KEY,JSON.stringify(clean));return clean;
+  }
+  return {finishTest,readWork,writeWork,KEY,LEVELS,DOMAINS,labels,defaults,sanitize,load,save,active,effective,suggest};
 });
