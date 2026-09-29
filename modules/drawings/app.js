@@ -16,7 +16,8 @@ if(leverRequest){
  const values=leverRequest.split(',').map(Number),[genre,power,bp,br]=values;
  if(values.length===4&&[1,2,3].includes(genre)&&values.slice(1).every(v=>Number.isFinite(v)&&v>0&&v<=10000)&&!(genre===2&&bp<=br)&&!(genre===3&&bp>=br)){
   if(!documentData.objects.length||confirm('Obrir aquesta palanca substituirà el dibuix desat en aquest navegador. Vols continuar?')){
-   documentData={title:'Palanca de '+genre+'r gènere',objects:[{id:id(),kind:'lever',x:250,y:185,length:660,leverMode:'physical',genre,powerArm:bp,resistanceArm:br,powerForce:power,resistanceForce:Number((power*bp/br).toFixed(2)),label:'P·bₚ = R·bᵣ',color:'#264a58'}]};
+   documentData={title:'Palanca de '+({1:'1r',2:'2n',3:'3r'}[genre])+' gènere',objects:[{id:id(),kind:'lever',x:250,y:185,length:660,leverMode:'physical',genre,powerArm:bp,resistanceArm:br,powerForce:power,resistanceForce:Number((power*bp/br).toFixed(2)),label:'P·bₚ = R·bᵣ',color:'#264a58'}]};
+   selected=documentData.objects[0].id;
    save();
    history.replaceState(null,'',location.pathname);
   }

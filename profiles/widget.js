@@ -9,8 +9,11 @@
   return {profile,level:TechEduProfiles.effective(profile,domain),supports:profile?.supports||{shortText:false,stepByStep:false,hideSolution:false}};
  };
  window.TechEduSetDomain=next=>{domain=next;render()};
+ let renderedSignature=null;
  function render(){
   const data=TechEduProfiles.load(),active=TechEduProfiles.active(data);
+  const signature=JSON.stringify({domain,activeId:data.activeId,profiles:data.profiles.map(({work,attempts,...profile})=>profile)});
+  if(signature===renderedSignature)return;renderedSignature=signature;
   const options=data.profiles.map(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;return o});
   panel.replaceChildren();
   const label=document.createElement('label');label.textContent='Perfil actiu ';

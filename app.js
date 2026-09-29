@@ -1,5 +1,5 @@
 const modules=[
-{id:'communications',name:'CommunicationsLab',icon:'∿',type:'simulate',status:'ready',desc:'Senyals i soroll, digitalització d’ones i codificació de text UTF-8 i imatges. Experimenta i reprèn el treball.',tags:['TIC','Senyals','UTF-8','Píxels'],url:'./modules/communications/'},
+{id:'communications',name:'CommunicationsLab',icon:'∿',type:'simulate',status:'ready',desc:'Senyals, digitalització, UTF-8, píxels, detecció d’errors i transmissió per paquets. Reptes adaptats amb treball local.',tags:['TIC','Senyals','UTF-8','Píxels'],url:'./modules/communications/'},
 {id:'profiles',name:'Perfils i proves de nivell',icon:'◉',type:'practice',status:'ready',desc:'Perfils locals revisables, proves inicials per àmbits i activitats adaptades al grau de pauta de cada alumne.',tags:['DUA','Perfils','Proves'],url:'./profiles/'},
 {id:'draw',name:'TechDrawings',icon:'✎',type:'create',status:'ready',desc:'Editor i generador d’esquemes tecnològics vectorials: forces, esforços, estructures, màquines, energia i circuits.',tags:['SVG','PNG','Esquemes','Forces'],url:'./modules/drawings/'},
 {id:'mechanisms',name:'MechanismLab',icon:'⚙',type:'simulate',status:'ready',desc:'Laboratori de mecanismes basat en GearLab: engranatges i transmissions amb simulació interactiva.',tags:['Engranatges','RPM','Transmissió'],url:'./modules/mechanisms/'},

@@ -15,10 +15,10 @@ function render(){
  $('#history').innerHTML=p.attempts.length?[...p.attempts].reverse().map(a=>{const result=P.suggest(B[a.domain].resolve(a.questionIds),a.answers);return '<div class="history-item"><b>'+B[a.domain].title+'</b> · '+escapeHTML(a.date.slice(0,10))+' · '+result.score+'/'+result.total+' <span class="badge">Proposta: '+P.labels[result.level]+'</span></div>'}).join(''):'<p class="fine">Encara no hi ha proves desades.</p>';
  const work=P.load().profiles.find(x=>x.id===p.id)?.work||{};
  $('#workOverview').replaceChildren();
- for(const [activity,entry] of Object.entries(work)){if(activity.startsWith('test-'))continue;const a=document.createElement('a');a.href=activity==='communications-digitization'?'../modules/communications/digitization.html':activity==='communications-encoding'?'../modules/communications/encoding.html':'../modules/'+activity+'/';a.textContent=activity+' · '+(entry.updatedAt||'').slice(0,10)+' · '+(entry.history?.length||0)+' evidències';const row=document.createElement('p');row.append(a);$('#workOverview').append(row);}
+ for(const [activity,entry] of Object.entries(work)){if(activity.startsWith('test-'))continue;const a=document.createElement('a');a.href=activity==='communications-digitization'?'../modules/communications/digitization.html':activity==='communications-encoding'?'../modules/communications/encoding.html':activity==='communications-errors'?'../modules/communications/errors.html':activity==='communications-packets'?'../modules/communications/packets.html':'../modules/'+activity+'/';a.textContent=activity+' · '+(entry.updatedAt||'').slice(0,10)+' · '+(entry.history?.length||0)+' evidències';const row=document.createElement('p');row.append(a);$('#workOverview').append(row);}
 }
 $('#addForm').onsubmit=e=>{
- e.preventDefault();const name=$('#newName').value.trim();if(!name)return;
+ e.preventDefault();const name=$('#newName').value.trim();if(!name)return;if(data.profiles.length>=100){$('#saveStatus').textContent='Màxim de 100 perfils locals. Exporta una còpia abans d’eliminar perfils.';return;}
  const p={id:crypto.randomUUID(),name,level:'standard',domains:Object.fromEntries(P.DOMAINS.map(d=>[d,null])),supports:{shortText:false,stepByStep:false,hideSolution:false},attempts:[]};
  data.profiles.push(p);data.activeId=p.id;testDomain=null;lastResult=null;commit();$('#newName').value='';$('#testArea').innerHTML='';render();
 };
@@ -36,15 +36,17 @@ function showTest(){
  const bank=B[testDomain];if(!bank)return;
  testRecord=P.readWork(current().id,'test-'+testDomain);
  const last=current().attempts.filter(a=>a.domain===testDomain).at(-1);
- testQuestions=testRecord?.draft?.questionIds?bank.resolve(testRecord.draft.questionIds):(last?.questionIds?.[0]?.includes('-a-')||last&&!last.questionIds?bank.alternates:bank.questions);
+ testQuestions=Array.isArray(testRecord?.draft?.questionIds)?bank.resolve(testRecord.draft.questionIds):(last?.questionIds?.[0]?.includes('-a-')||last&&!last.questionIds?bank.alternates:bank.questions);
  if(testQuestions.length!==6)testQuestions=bank.questions;
  $('#testArea').innerHTML='<form id="testForm"><h3>'+bank.title+'</h3><p class="fine">Respon sense ajuda per orientar el punt de partida. Pots repetir-la després d’haver practicat.</p>'+testQuestions.map((q,i)=>'<fieldset class="test-question"><legend>'+(i+1)+'. '+escapeHTML(q.text)+'</legend>'+q.options.map((option,j)=>'<label><input type="radio" name="q'+i+'" value="'+j+'" required> '+escapeHTML(option)+'</label>').join('')+'<label><input type="radio" name="q'+i+'" value="-1" required> Encara no ho sé</label></fieldset>').join('')+'<button class="primary">Guarda i interpreta les respostes</button></form>';
  const form=$('#testForm');
- for(const [i,a] of (testRecord?.draft?.answers||[]).entries()){const input=form.querySelector('[name="q'+i+'"][value="'+a+'"]');if(input)input.checked=true;}
+ for(const [i,a] of (Array.isArray(testRecord?.draft?.answers)?testRecord.draft.answers:[]).slice(0,6).entries()){if(!Number.isInteger(a)||a< -1||a>=testQuestions[i].options.length)continue;const input=form.querySelector('[name="q'+i+'"][value="'+a+'"]');if(input)input.checked=true;}
  form.onchange=()=>{try{const answers=testQuestions.map((_,i)=>{const v=new FormData(form).get('q'+i);return v===null?null:Number(v)});testRecord=P.writeWork(current().id,'test-'+testDomain,{draft:{questionIds:testQuestions.map(q=>q.id),answers}},testRecord?.revision||0);$('#saveStatus').textContent='Prova en curs desada.'}catch(e){$('#saveStatus').textContent='No s’ha desat: '+e.message}};
  $('#testForm').onsubmit=e=>{e.preventDefault();const answers=testQuestions.map((_,i)=>Number(new FormData(e.target).get('q'+i)));if(answers.some(x=>!Number.isInteger(x)))return;
-  const p=current();p.attempts.push({domain:testDomain,date:new Date().toISOString(),answers,questionIds:testQuestions.map(q=>q.id),bankVersion:bank.version});p.attempts=p.attempts.slice(-40);
-  testRecord=P.writeWork(p.id,'test-'+testDomain,{draft:null},testRecord?.revision||0);lastResult=P.suggest(testQuestions,answers);commit('Prova desada en aquest navegador.');showResult(answers);render();
+  try{const attempt={domain:testDomain,date:new Date().toISOString(),answers,questionIds:testQuestions.map(q=>q.id),bankVersion:bank.version};
+   data=P.finishTest(current().id,testDomain,attempt,testRecord?.revision||0,data.metaRevision);testRecord=P.readWork(current().id,'test-'+testDomain);lastResult=P.suggest(testQuestions,answers);$('#saveStatus').textContent='Prova desada en aquest navegador.';showResult(answers);render();
+  }catch(err){$('#saveStatus').textContent='No s’ha desat: '+err.message;}
+
  };
 }
 function showResult(answers){
@@ -60,7 +62,7 @@ $('#importData').onchange=async e=>{
  const file=e.target.files?.[0];if(!file)return;
  try{if(file.size>10_000_000)throw Error('El fitxer supera 10 MB.');
   const raw=JSON.parse(await file.text());if(raw?.version!==1||!Array.isArray(raw.profiles))throw Error('Format de perfils no compatible.');
-  const incoming=P.sanitize(raw);if(!confirm('La importació substituirà tots els perfils locals actuals. Vols continuar?'))return;
+  const incoming=P.sanitize(raw);if(incoming.profiles.length!==raw.profiles.length)throw Error('Hi ha perfils invàlids, duplicats o més de 100 perfils. No s’ha substituït cap dada.');if(!confirm('La importació substituirà tots els perfils locals actuals. Vols continuar?'))return;
   data=P.save(incoming,true);testDomain=null;lastResult=null;$('#testArea').innerHTML='';render();
  }catch(err){alert('No s’ha pogut importar: '+err.message)}finally{e.target.value=''}
 };
