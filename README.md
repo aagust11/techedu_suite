@@ -94,3 +94,14 @@ Tecnofigures incorpora politges amb radi, longituds i angles de corda editables;
 Els exemples connectats serveixen per construir esquemes: no calculen tensió, equilibri ni moviment. La lectura del dinamòmetre és editable i no és una mesura simulada. Totes les pantalles comparteixen ara la navegació de mòduls, la capçalera de compte i els estils de controls, títols i panells.
 
 Verificació específica: `tests/rigging.test.js` cobreix geometria, dependències i remapatge d'identificadors; `tests/browser-rigging.cjs` comprova edició, connexions, persistència, importació, caixa de la palanca i vista mòbil.
+
+
+### CircuitLab i TechWorksheet
+
+**CircuitLab** (`modules/circuits/`) permet configurar circuits de resistències en sèrie, paral·lel (2–4 resistències) i mixtos R1 + (R2 ∥ R3), amb font ideal de 0–48 V i interruptor. Mostra Req, I, P i mesures de cada resistència. Les activitats inclouen predicció, càlcul, comprovació amb tolerància d’arrodoniment i conclusió, amb pautes o ampliació segons el compte. Es poden ocultar les mesures, recuperar el circuit amb JSON i enviar una activitat amb esquema i solucionari a TechWorksheet. És un model de corrent continu amb resistències ideals positives: no és un editor de cablejat lliure, ni modela curtcircuits o components no òhmics.
+
+**TechWorksheet** (`modules/worksheet/`) prepara una fitxa editable amb fins a 30 blocs: text, preguntes i imatges. Inclou plantilles d’electricitat, palanques, lògica i materials en tres variants de suport; permet reordenar, duplicar i eliminar blocs, editar les solucions i l’espai de resposta. Imprimeix una versió d’alumnat sense solucions o una versió docent, i permet desar com a PDF amb el diàleg del navegador. El JSON conserva l’edició completa, inclòs el solucionari. També rep esquemes des del menú Exporta de Tecnofigures. Les activitats afegides conserven la seva variant encara que després es canviï de nivell.
+
+Cada mòdul conserva un esborrany per compte (i un de Visitant separat), inclòs en la còpia del compte. Per conservar diverses fitxes, exporta-les com a JSON. Hi ha control de mida, errors de quota i detecció de versions modificades en altres pestanyes. Les imatges s’incrusten i la fitxa completa es limita a uns 390 kB per garantir-ne el desament local.
+
+Proves: `tests/builders.test.js` comprova càlculs, conservació de potència, plantilles i còpia de compte; `tests/browser-builders.cjs` verifica controls, transferències, edició, impressió sense solucions, JSON, comptes, conflictes i vista mòbil.

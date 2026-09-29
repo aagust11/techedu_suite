@@ -14,7 +14,7 @@
   function cleanWork(work){
     if(!work||typeof work!=='object'||Array.isArray(work))return {};
     const result={};
-    for(const key of ['logic','problems','materials','mechanisms','test-logic','test-mechanisms','test-electricity','test-materials','communications','test-communications','communications-digitization','communications-encoding','communications-errors','communications-packets','drawings']){
+    for(const key of ['logic','problems','materials','mechanisms','test-logic','test-mechanisms','test-electricity','test-materials','communications','test-communications','communications-digitization','communications-encoding','communications-errors','communications-packets','drawings','circuits','worksheet']){
       const w=work[key];
       if(w&&typeof w==='object'&&Number.isInteger(w.revision)&&w.revision>=0&&JSON.stringify(w).length<500000&&safeJSON(w)){
         result[key]={revision:w.revision,updatedAt:typeof w.updatedAt==='string'?w.updatedAt:'',draft:w.draft&&typeof w.draft==='object'?w.draft:null,history:Array.isArray(w.history)?w.history.filter(x=>x&&typeof x.at==='string'&&x.draft&&typeof x.draft==='object').slice(-12):[],events:Array.isArray(w.events)?w.events.slice(-200):[]};

@@ -4,7 +4,7 @@
  document.body.prepend(panel);
  document.querySelector('header')?.classList.add('module-toolbar');
  const navigation=document.createElement('nav');navigation.className='suite-nav';navigation.setAttribute('aria-label','Mòduls de TechEdu Suite');
- const destinations=[['Inici',''],['Tecnofigures','modules/drawings/'],['Mecanismes','modules/mechanisms/'],['Problemes','modules/problems/'],['Materials','modules/materials/'],['Lògica','modules/logic/'],['Comunicacions','modules/communications/']];
+ const destinations=[['Inici',''],['Tecnofigures','modules/drawings/'],['Fitxes','modules/worksheet/'],['Circuits','modules/circuits/'],['Mecanismes','modules/mechanisms/'],['Problemes','modules/problems/'],['Materials','modules/materials/'],['Lògica','modules/logic/'],['Comunicacions','modules/communications/']];
  for(const [name,path] of destinations){const a=document.createElement('a');a.href=new URL(path||'index.html',base).href;a.textContent=name;const here=location.pathname,target=new URL(a.href).pathname;if(path?here.startsWith(new URL(path,base).pathname):here===target||here===base.pathname)a.setAttribute('aria-current','page');navigation.append(a);}
  panel.after(navigation);
 
