@@ -1,3 +1,4 @@
+import {editContext,saveEdit,installReturn} from '../../shared/editable.mjs';
 import {setupViewport} from './viewport.mjs?v=1';
 import {setupGallery} from './gallery.mjs?v=1';
 import {handles,moveHandle} from './handles.mjs?v=1';
@@ -5,7 +6,7 @@ import {sectionInspector} from './inspector.mjs?v=2';
 import {renderIncline,inclineFields,upgradeRamp} from './incline.mjs?v=1';
 import {renderLoads,loadFields,loadBottom} from './pulley-loads.mjs?v=1';
 import {renderEffort,effortFields} from './efforts.mjs?v=2';
-import {sendToWorksheet} from '../../shared/workspace.mjs';
+import {sendToWorksheet} from '../../shared/workspace.mjs?v=priority1';
 import {modules} from './modules.js?v=sections1';
 import * as Rig from './rigging.mjs?v=1';
 
@@ -20,7 +21,7 @@ let documentData, moduleId='forces', selected=null, tool='select', drag=null, dr
 let past=[], future=[], selectedLabel=null,connectStart=null;
 let drawingOwner=window.TechEduProfiles?.active()?.id||null,drawingRevision=0,drawingDirty=false;
 function loadDrawing(){
- try{const work=drawingOwner?TechEduProfiles.readWork(drawingOwner,'drawings'):null;drawingRevision=work?.revision||0;const saved=drawingOwner?work?.draft?.extra?.document:JSON.parse(localStorage.getItem('techdrawings.v1'));documentData=valid(saved)?saved:starter();}catch{documentData=starter();drawingRevision=0;}
+ try{const editing=editContext('drawings');if(editing){documentData=clone(editing.source.state);drawingDirty=false;return;}const work=drawingOwner?TechEduProfiles.readWork(drawingOwner,'drawings'):null;drawingRevision=work?.revision||0;const saved=drawingOwner?work?.draft?.extra?.document:JSON.parse(localStorage.getItem('techdrawings.v1'));documentData=valid(saved)?saved:starter();}catch{documentData=starter();drawingRevision=0;}
  drawingDirty=false;
 }
 loadDrawing();
@@ -38,7 +39,7 @@ if(leverRequest){
  }
 }
 function valid(d){return !!d && typeof d.title==='string' && Array.isArray(d.objects) && d.objects.length<=500 && d.objects.every(o=>o && typeof o.kind==='string' && Number.isFinite(o.x) && Number.isFinite(o.y));}
-function save(){try{
+function save(){try{if(new URLSearchParams(location.search).get('edit')==='worksheet'){saveEdit('drawings',documentData);drawingDirty=false;$('#saveStatus').textContent='Copiа de la fitxa desada temporalment';return true;}
  if(drawingOwner){const record=TechEduProfiles.writeWork(drawingOwner,'drawings',{draft:{extra:{document:documentData,label:documentData.title}}},drawingRevision);drawingRevision=record.revision;}
  else localStorage.setItem('techdrawings.v1',JSON.stringify(documentData));
  drawingDirty=false;$('#saveStatus').textContent=drawingOwner?'Desat al compte local':'Desat com a visitant';return true;
@@ -172,7 +173,7 @@ document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(document
 const safeName=()=>documentData.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'tecnofigures';
 function exportedSVG(mode=documentData.exerciseMode||'teacher',doc=documentData){const source=`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720"><defs><marker id="arrowHead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11" fill="none" stroke="#264a58" stroke-width="2"/></marker></defs><rect width="1200" height="720" fill="white"/>${[...doc.objects.filter(o=>o.kind==='rope'),...doc.objects.filter(o=>o.kind!=='rope')].map(o=>symbol(o,false,mode,doc.objects)).join('')}</svg>`;return source;}
 function download(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-$('#exportBtn').onclick=()=>$('dialog').showModal();document.querySelectorAll('[data-export]').forEach(b=>b.onclick=async()=>{const format=b.dataset.export,audience=$('#exportAudience').value,mode=audience==='teacher'?'teacher':audience==='student'?(documentData.studentStyle||'blank'):(documentData.exerciseMode||'teacher'),name=mode==='teacher'?safeName():'tecnofigures-alumnat';if(format==='worksheet'){try{sendToWorksheet([{type:'image',title:mode==='teacher'?(documentData.title||'Esquema de Tecnofigures'):'Esquema per completar',prompt:'Observa l’esquema i explica què representa.',image:'data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(exportedSVG(mode))))}])}catch(e){alert('No s’ha pogut enviar l’esquema: '+e.message)}return;}if(format==='json')download(new Blob([JSON.stringify({version:1,...documentData},null,2)],{type:'application/json'}),name+'.json');if(format==='svg')download(new Blob([exportedSVG(mode)],{type:'image/svg+xml'}),name+'.svg');if(format==='png'){const url=URL.createObjectURL(new Blob([exportedSVG(mode)],{type:'image/svg+xml'})),img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');canvas.width=2400;canvas.height=1440;canvas.getContext('2d').drawImage(img,0,0,2400,1440);canvas.toBlob(blob=>{if(blob)download(blob,name+'.png');URL.revokeObjectURL(url);});};img.onerror=()=>{URL.revokeObjectURL(url);alert('No s’ha pogut generar el PNG. Prova d’exportar l’SVG.');};img.src=url;}$('dialog').close();});
+$('#exportBtn').onclick=()=>$('dialog').showModal();document.querySelectorAll('[data-export]').forEach(b=>b.onclick=async()=>{const format=b.dataset.export,audience=$('#exportAudience').value,mode=audience==='teacher'?'teacher':audience==='student'?(documentData.studentStyle||'blank'):(documentData.exerciseMode||'teacher'),name=mode==='teacher'?safeName():'tecnofigures-alumnat';if(format==='worksheet'){try{sendToWorksheet([{type:'image',title:mode==='teacher'?(documentData.title||'Esquema de Tecnofigures'):'Esquema per completar',prompt:'Observa l’esquema i explica què representa.',source:{module:'drawings',version:1,state:clone(documentData)},image:'data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(exportedSVG(mode))))}])}catch(e){alert('No s’ha pogut enviar l’esquema: '+e.message)}return;}if(format==='json')download(new Blob([JSON.stringify({version:1,...documentData},null,2)],{type:'application/json'}),name+'.json');if(format==='svg')download(new Blob([exportedSVG(mode)],{type:'image/svg+xml'}),name+'.svg');if(format==='png'){const url=URL.createObjectURL(new Blob([exportedSVG(mode)],{type:'image/svg+xml'})),img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');canvas.width=2400;canvas.height=1440;canvas.getContext('2d').drawImage(img,0,0,2400,1440);canvas.toBlob(blob=>{if(blob)download(blob,name+'.png');URL.revokeObjectURL(url);});};img.onerror=()=>{URL.revokeObjectURL(url);alert('No s’ha pogut generar el PNG. Prova d’exportar l’SVG.');};img.src=url;}$('dialog').close();});
 $('#importBtn').onclick=()=>$('#importInput').click();$('#importInput').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>2_000_000)throw Error('El fitxer és massa gran.');const input=JSON.parse(await file.text());if(!valid(input))throw Error('Aquest JSON no és un projecte compatible.');if(documentData.objects.length&&!confirm('Importar el projecte substituirà el dibuix actual. Vols continuar?'))return;mutate(()=>{documentData={title:input.title.slice(0,100),exerciseMode:['teacher','blank','hidden'].includes(input.exerciseMode)?input.exerciseMode:'teacher',studentStyle:input.studentStyle==='hidden'?'hidden':'blank',objects:Rig.remapObjects(input.objects,id).map(o=>({...o,label:String(o.label||'').slice(0,180)}))};selected=null;});$('dialog').close();}catch(err){alert(err.message);}finally{e.target.value='';}};
 const viewport=setupViewport(svg,scene,()=>selected);
 $('#galleryBtn').onclick=setupGallery({getDocument:()=>documentData,valid,beforeOpen:()=>!drawingDirty||save(),preview:doc=>exportedSVG(doc.exerciseMode||'teacher',doc),openDocument:doc=>{mutate(()=>{documentData=doc;selected=null});viewport.reset()}});
@@ -181,3 +182,7 @@ nav();moduleView();render();updateTools();save();
 svg.addEventListener('keydown',e=>{const target=e.target.closest?.('[data-handle]');if(!target||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();e.stopPropagation();const o=selectedObject(),key=target.dataset.handle,h=handles(documentData.objects,o).find(h=>h.key===key);if(!h)return;const step=e.shiftKey?10:2;mutate(()=>moveHandle(documentData.objects,o,key,{x:h.x+(e.key==='ArrowLeft'?-step:e.key==='ArrowRight'?step:0),y:h.y+(e.key==='ArrowUp'?-step:e.key==='ArrowDown'?step:0)},clone(o)));svg.querySelector('[data-handle="'+key+'"]')?.focus();});
 
 svg.addEventListener('keydown',e=>{if(tool==='connect'&&e.target.matches('[data-target]')&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();connectAt(e);}});
+
+installReturn('drawings',()=>({type:'image',title:documentData.title,prompt:'Observa l’esquema i explica què representa.',image:'data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(exportedSVG()))),source:{module:'drawings',version:1,state:clone(documentData)}}));
+
+const projectId=new URLSearchParams(location.search).get('project');if(projectId){try{const record=drawingOwner?TechEduProfiles.readWork(drawingOwner,'drawing-gallery'):JSON.parse(localStorage.getItem('techdrawings.gallery.v1')||'null');const item=record?.draft?.extra?.projects?.find(p=>p.id===projectId);if(!item)throw Error('Projecte no trobat en aquest compte.');if(!documentData.objects.length||confirm('Obrir aquesta còpia substituirà l’esborrany actual. Desa’l a Projectes si el vols conservar.')){mutate(()=>{documentData=clone(item.document);selected=null});viewport.reset()}}catch(e){$('#saveStatus').textContent=e.message}history.replaceState(null,'',location.pathname)}
