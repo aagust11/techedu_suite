@@ -117,3 +117,13 @@ L’inspector de Tecnofigures agrupa les opcions en seccions plegables amb resum
 El pla inclinat admet angle de 5–70°, longitud, bloc/bola/carretó, mida i posició al pendent, superfície rugosa, etiqueta d’angle, pes, normal, fregament i força aplicada. Les politges admeten càrregues opcionals als dos extrems, amb mida i etiqueta independents i vectors de pes/tensió. Hi ha exemples de pla inclinat i d’Atwood. Les càrregues segueixen els extrems quan es modifiquen les cordes. Els vectors són esquemàtics; no calculen forces ni equilibri.
 
 La disposició per tasques s’ha inspirat en l’observació de la interfície dels generadors Inclined Plane i Pulley de PhysicsFigures; els controls i dibuixos s’han implementat en el motor propi de Tecnofigures. Prova específica: `tests/browser-sections.cjs`.
+
+### Espai de treball de Tecnofigures
+
+Zoom, enquadrament de tot el dibuix o de la selecció, desplaçament de la vista i pantalla completa. La vista no altera les coordenades ni el full de 1200 × 720 de l'exportació. Els punts de control editen el pla inclinat, els extrems de les politges i els segments (corda, línia, cable i força); admeten ratolí i fletxes del teclat (2 px, o 10 amb Majúscules), amb desfer/refer.
+
+**Projectes** conserva fins a 12 còpies per compte local o visitant, amb miniatures, duplicació, nom, actualització i eliminació. Es pot exportar/importar la galeria; les còpies del compte també la inclouen. Límit de 400 kB de dades de projectes. No hi ha sincronització remota.
+
+El **mode exercici** mostra les etiquetes originals, les substitueix per buits o les oculta. Cada peça pot conservar el seu text o definir una excepció. L'exportació SVG/PNG i l'enviament a TechWorksheet permeten triar versió d'alumnat o docent; el JSON editable conserva sempre els textos originals. No és una protecció d'accés al solucionari.
+
+Proves: `tests/handles.test.js` i `tests/browser-drawing-workspace.cjs`. Propostes pendents de tot el producte: [full de ruta](docs/roadmap-suite.md).
