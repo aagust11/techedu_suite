@@ -17,4 +17,6 @@ const efforts=modules.find(m=>m.id==='efforts');
 const effortNames=[['tension','Tracció','⇠ ⇢'],['compression','Compressió','⇢ ⇠'],['bending','Flexió','⌒'],['shear','Tall / cisallament','⇄'],['torsion','Torsió','⟳'],['buckling','Vinclament','⌢']];
 efforts.pieces.unshift(...effortNames.map(([k,name,icon])=>piece('effort-'+k,name+' · abans i després',icon,'Element deformable amb forces i vista comparada')));
 efforts.examples.unshift(...effortNames.map(([k,name])=>({name:name+' · abans i després',detail:'Compara la forma inicial i la deformació',objects:[n('effort-'+k,230,125,name,{deformation:65,effortWidth:400,effortHeight:k==='buckling'?24:55,showForces:true,showOriginal:true})]})));
+modules.find(m=>m.id==='rigging').examples.unshift({name:'Dues càrregues · Atwood',detail:'Càrregues als extrems, tensions i pesos editables',objects:[n('fixedpulley',490,130,'Politja amb dues càrregues',{radius:65,ropeLengthA:170,ropeLengthB:235,showMassA:true,showMassB:true,pulleyTension:true,pulleyWeight:true})]});
+modules.find(m=>m.pieces.some(p=>p.id==='ramp')).examples.unshift({name:'Pla inclinat configurable',detail:'Angle, objecte, superfície i forces',objects:[n('ramp',280,190,'Pla inclinat',{rampAngle:30,rampLength:500,rampObject:'block',rampWeight:true,rampNormal:true})]});
 export const allKinds = Object.fromEntries(modules.flatMap(m=>m.pieces.map(p=>[p.id,p])));
