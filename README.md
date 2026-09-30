@@ -13,7 +13,7 @@ Suite modular d'eines educatives per a Tecnologia i Digitalització (ESO i Batxi
 - **TechWorksheet** — construcció de fitxes i activitats.
 - **LogicLab** — expressions de fins a cinc variables, comparació, contraexemples i taules de veritat. Per a dues a quatre variables mostra Karnaugh, agrupacions i expressió mínima en suma de productes. El mode docent oculta també les agrupacions i el veredicte.
 - **CircuitLab** — circuits elèctrics educatius.
-- **StructureLab** — estructures, càrregues i esforços.
+- **StructureLab** — biga recolzada i encavallada triangular amb reaccions i esforços calculats.
 - **MaterialsLab** — propietats i selecció de materials.
 
 ## Principis d'arquitectura
@@ -127,3 +127,15 @@ Zoom, enquadrament de tot el dibuix o de la selecció, desplaçament de la vista
 El **mode exercici** mostra les etiquetes originals, les substitueix per buits o les oculta. Cada peça pot conservar el seu text o definir una excepció. L'exportació SVG/PNG i l'enviament a TechWorksheet permeten triar versió d'alumnat o docent; el JSON editable conserva sempre els textos originals. No és una protecció d'accés al solucionari.
 
 Proves: `tests/handles.test.js` i `tests/browser-drawing-workspace.cjs`. Propostes pendents de tot el producte: [full de ruta](docs/roadmap-suite.md).
+
+### StructureLab i prioritat 1
+
+**StructureLab** ja és operatiu: biga simplement recolzada amb càrrega puntual, reaccions, diagrames de tallant i moment; encavallada triangular amb esforços axials. Magnitud, posició, llum i alçada són configurables. Les pautes s'adapten al nivell. [Abast físic i comprovacions](docs/structurelab-model.md).
+
+**Continua treballant** a la portada i al compte mostra esborranys, projectes de Tecnofigures, data, evidències i següent pas. Els projectes tenen enllaç a la còpia concreta; obrir-los demana confirmar la substitució de l'esborrany.
+
+**Blocs editables de TechWorksheet**: els nous enviaments de Tecnofigures, CircuitLab i StructureLab conserven el model d'origen. «Edita al laboratori» obre una còpia aïllada; «Actualitza el bloc i torna» actualitza esquema/enunciat/solució amb confirmació. El projecte habitual del laboratori no canvia. Si algú ha modificat el bloc d'origen mentrestant, es rebutja la substitució. Les imatges antigues continuen sent imatges estàtiques.
+
+**Recorregut comú** als mòduls operatius: objectiu concret, predicció, pistes successives, fins a sis captures de paràmetres/resultats visibles, explicació i autoavaluació. Controls comuns per desar, exportar i reiniciar aquest recorregut; reiniciar-lo no esborra el laboratori. El quadern anterior queda accessible en un apartat desplegable. L'exportació del recorregut és un registre llegible de les evidències; la còpia completa del compte permet restaurar les dades.
+
+El desament continua sent local, separat per compte i visitant, amb comprovació de revisions abans d'escriure. Proves noves de navegador: `browser-structures-priority.cjs` i `browser-priority-conflicts.cjs`.

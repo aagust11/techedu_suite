@@ -7,7 +7,7 @@ const modules=[
 {id:'worksheet',name:'TechWorksheet',icon:'▤',type:'create',status:'ready',url:'./modules/worksheet/',desc:'Constructor de fitxes que combina problemes, dibuixos, activitats i laboratoris de la suite.',tags:['Fitxes','PDF','Activitats']},
 {id:'logic',name:'LogicLab',icon:'⊕',type:'practice',status:'ready',desc:'Boole, taules de veritat, Karnaugh i portes lògiques en un flux visual i interactiu.',tags:['Boole','Karnaugh','Portes'],url:'./modules/logic/'},
 {id:'circuits',name:'CircuitLab',icon:'ϟ',type:'simulate',status:'ready',url:'./modules/circuits/',desc:'Circuits educatius simplificats amb mesures, sèrie/paral·lel i activitats guiades.',tags:['Electricitat','Ohm','Circuits']},
-{id:'structures',name:'StructureLab',icon:'△',type:'simulate',status:'planned',desc:'Construcció de marcs i encavallades per explorar càrregues, tracció, compressió i deformació.',tags:['Estructures','Esforços','Ponts']},
+{id:'structures',name:'StructureLab',icon:'△',type:'simulate',status:'ready',url:'./modules/structures/',desc:'Biga recolzada i encavallada triangular: reaccions, tallant, moment i esforços axials.',tags:['Estructures','Esforços','Ponts']},
 {id:'materials',name:'MaterialsLab',icon:'◇',type:'practice',status:'ready',desc:'Comparador de propietats i reptes de selecció de materials segons necessitats tècniques.',tags:['Materials','Propietats','Selecció'],url:'./modules/materials/'}
 ];
 const labels={ready:'OPERATIU',next:'SEGÜENT',planned:'PLANIFICAT'};let filter='all';
@@ -15,3 +15,6 @@ const root=document.querySelector('#modules'),search=document.querySelector('#se
 function render(){const q=search.value.toLocaleLowerCase('ca');const list=modules.filter(m=>(filter==='all'||m.type===filter)&&[m.name,m.desc,...m.tags].join(' ').toLocaleLowerCase('ca').includes(q));root.innerHTML=list.map(m=>`<article class="card"><div class="head"><span class="icon">${m.icon}</span><span class="status ${m.status}">${labels[m.status]}</span></div><h3>${m.name}</h3><p>${m.desc}</p><div class="tags">${m.tags.map(t=>`<span>${t}</span>`).join('')}</div>${m.url?`<a class="open" href="${m.url}">Obre el mòdul →</a>`:''}</article>`).join('')||'<p>No hi ha cap mòdul que coincideixi amb la cerca.</p>'}
 document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render()});search.oninput=render;render();
 document.querySelector('#readyCount').textContent=modules.filter(m=>m.status==='ready').length;
+
+import {mountResume} from './shared/resume.mjs';
+mountResume(document.querySelector('#resumeWork'),new URL('./',location.href));

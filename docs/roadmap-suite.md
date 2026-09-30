@@ -1,8 +1,8 @@
 # Millores proposades per a TechEdu Suite
 
-Revisió de la implementació del 30 de setembre de 2026. Les propostes següents són pendents; no són funcions ja disponibles.
+Revisió de la implementació del 30 de setembre de 2026. Actualització: la prioritat 1 i el primer StructureLab s’han implementat. Les ampliacions de prioritats 2 i 3 continuen pendents.
 
-## Prioritat 1: completar els recorreguts entre mòduls
+## Prioritat 1: implementada en aquesta etapa
 
 | Àmbit | Situació observada | Millora i criteri d'acceptació |
 | --- | --- | --- |
@@ -32,7 +32,7 @@ No deduir altes capacitats ni necessitats educatives d'un test breu. Guardar pre
 - **TechLab**: itineraris que coordinen mòduls existents, començant per «Dissenya un sistema d'elevació» i «Envia un missatge fiable»; evitar duplicar motors.
 - **EnergyLab**, possible després: cadena energètica, rendiment i consum amb unitats coherents.
 
-TechLab i StructureLab continuen planificats a la portada. Els esforços de Tecnofigures són esquemes, no un simulador estructural.
+TechLab continua planificat. StructureLab ja ofereix biga recolzada i encavallada triangular; els marcs i encavallades arbitràries queden pendents. Els esforços de Tecnofigures continuen sent esquemes.
 
 ## Ordre recomanat
 
@@ -43,3 +43,12 @@ TechLab i StructureLab continuen planificats a la portada. Els esforços de Tecn
 5. Ampliar mecanismes/materials i començar StructureLab amb un model acotat.
 
 Mantenir exportació/importació i proves de canvi de compte, conflictes entre pestanyes i fallades de desament en cada etapa. La sincronització entre dispositius requeriria una decisió independent sobre comptes remots; el funcionament actual és local.
+
+## Abast lliurat de la prioritat 1
+
+- Represa de treball a portada i compte, incloent còpies de la galeria.
+- Edició d'una còpia del model dins de blocs nous de fitxes; retorn amb control de conflictes.
+- Controls i missatges comuns per al recorregut d'aprenentatge; es conserven els controls especialitzats dels editors.
+- Predicció, pistes graduades, captures, explicació i autoavaluació, amb emmagatzematge local.
+
+Les captures són registres de paràmetres i resultats visibles, no reproduccions interactives de totes les simulacions. Els tests inicials continuen orientant pautes, sense diagnosticar capacitats.
