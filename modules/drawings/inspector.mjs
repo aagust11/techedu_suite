@@ -5,7 +5,7 @@ export function sectionInspector(root,o){
  const groups=new Map(),kind=o.kind;
  const category=node=>{const k=node.querySelector?.('[data-property]')?.dataset.property||'';
  if(node.id==='duplicateObj'||node.id==='deleteObj')return 'Accions';
- if(['label','color','size'].includes(k)||node.id==='resetLabels'||node.textContent.includes('Arrossega qualsevol'))return 'Etiquetes i aspecte';
+ if(['label','color','size','exerciseLabel'].includes(k)||node.id==='resetLabels'||node.textContent.includes('Arrossega qualsevol'))return 'Etiquetes i aspecte';
  if(['x','y','x2','y2'].includes(k))return 'Posició';
  if(k.startsWith('rope')||node.querySelector?.('[data-connection]')||k==='thickness'||node.id==='connectionStatus')return 'Cordes i connexions';
  if(k.startsWith('mass')||k.startsWith('showMass'))return 'Càrregues';
