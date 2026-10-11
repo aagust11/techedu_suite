@@ -52,3 +52,7 @@ Mantenir exportació/importació i proves de canvi de compte, conflictes entre p
 - Predicció, pistes graduades, captures, explicació i autoavaluació, amb emmagatzematge local.
 
 Les captures són registres de paràmetres i resultats visibles, no reproduccions interactives de totes les simulacions. Els tests inicials continuen orientant pautes, sense diagnosticar capacitats.
+
+## Actualització 11 d’octubre de 2026
+
+Implementada l'etapa de mesures i avaries guiades de CircuitLab: amperímetre, voltímetre, punts de mesura, registre local, connexions incorrectes explicades i dos reptes reparables. El cablejat lliure i nous components elèctrics continuen pendents. La següent etapa de l'ordre recomanat és el feedback per passos i unitats de TechProblems.

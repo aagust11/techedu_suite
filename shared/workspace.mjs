@@ -1,4 +1,4 @@
-import {editContext,saveEdit} from './editable.mjs';
+import {editContext,saveEdit} from './editable.mjs?v=meters1';
 // Account-scoped drafts with optimistic concurrency, including a separate visitor draft.
 export function workspace(activity,defaults,clean,onLoad){
  if(new URLSearchParams(location.search).get('edit')==='worksheet'){try{const c=editContext(activity);onLoad(clean(c.source.state));document.querySelector('#saveStatus').textContent='Copiа editable de la fitxa · el projecte original es conserva.';return {save:value=>{try{return saveEdit(activity,clean(value))}catch(e){document.querySelector('#saveStatus').textContent=e.message;return false}}}}catch(e){onLoad(defaults());document.querySelector('#saveStatus').textContent=e.message;return {save:()=>false}}}

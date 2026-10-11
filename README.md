@@ -139,3 +139,11 @@ Proves: `tests/handles.test.js` i `tests/browser-drawing-workspace.cjs`. Propost
 **Recorregut comú** als mòduls operatius: objectiu concret, predicció, pistes successives, fins a sis captures de paràmetres/resultats visibles, explicació i autoavaluació. Controls comuns per desar, exportar i reiniciar aquest recorregut; reiniciar-lo no esborra el laboratori. El quadern anterior queda accessible en un apartat desplegable. L'exportació del recorregut és un registre llegible de les evidències; la còpia completa del compte permet restaurar les dades.
 
 El desament continua sent local, separat per compte i visitant, amb comprovació de revisions abans d'escriure. Proves noves de navegador: `browser-structures-priority.cjs` i `browser-priority-conflicts.cjs`.
+
+### CircuitLab: mesures i diagnòstic
+
+Amperímetre ideal en sèrie al tram principal o a una resistència; voltímetre ideal en paral·lel als terminals de la font, l'interruptor o una resistència. Les connexions incorrectes mostren una explicació i no generen lectures simulades. És una selecció de punts i connexions, no un editor de cablejat lliure.
+
+Es conserven les 12 darreres lectures amb les dades del circuit. Els reptes d'interruptor obert i connexió paral·lela inesperada requereixen una mesura abans del diagnòstic i permeten aplicar la reparació. Modificar manualment el muntatge cancel·la el repte actiu i manté les lectures anteriors com a registre. El nivell determina les pistes.
+
+El compte, JSON i blocs editables de TechWorksheet conserven instruments, lectures i repte. Proves: `tests/measurements.test.js` i `tests/browser-measurements.cjs`.
