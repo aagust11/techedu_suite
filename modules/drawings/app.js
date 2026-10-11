@@ -1,4 +1,4 @@
-import {editContext,saveEdit,installReturn} from '../../shared/editable.mjs';
+import {editContext,saveEdit,installReturn} from '../../shared/editable.mjs?v=meters1';
 import {setupViewport} from './viewport.mjs?v=1';
 import {setupGallery} from './gallery.mjs?v=1';
 import {handles,moveHandle} from './handles.mjs?v=1';
@@ -6,7 +6,7 @@ import {sectionInspector} from './inspector.mjs?v=2';
 import {renderIncline,inclineFields,upgradeRamp} from './incline.mjs?v=1';
 import {renderLoads,loadFields,loadBottom} from './pulley-loads.mjs?v=1';
 import {renderEffort,effortFields} from './efforts.mjs?v=2';
-import {sendToWorksheet} from '../../shared/workspace.mjs?v=priority1';
+import {sendToWorksheet} from '../../shared/workspace.mjs?v=meters1';
 import {modules} from './modules.js?v=sections1';
 import * as Rig from './rigging.mjs?v=1';
 
